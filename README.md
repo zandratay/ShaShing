@@ -1,4 +1,4 @@
-# portfolio-test2
+# ShaShing App
 
 This template should help get you started developing with Vue 3 in Vite.
 
@@ -28,5 +28,3 @@ npm run dev
 npm run build
 ```
 
-# bt3103-app
-Repo for BT3103 app
