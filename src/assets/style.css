@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+:root {
+  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f7f7f7;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+}
+
+h1 {
+  letter-spacing: 1px;
+  /* margin: 0; */
+}
+
+.graphs-container {
+  display: flex; 
+  margin-left: 5%;
+  gap: 5%; /* Adjust the space between the boxes */
+}
+
+.charts {
+  width: 25%;
+  height: 100px; 
+  background-color: white; 
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  box-shadow: var(--box-shadow);
+}
+
+.assets-container {
+  margin-left: 5%;
+  margin-top: 20px;
+}
+
+.assets {
+  width: 85%;
+  height: 60px; 
+  margin-bottom: 20px;
+  background-color: white; 
+  display: flex;
+  padding-left: 20px;
+  color: rgb(31, 43, 109);
+  justify-content: left; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  box-shadow: var(--box-shadow);
+}
+
+.assets:hover {
+  width: 86%;
+  height: 65px;
+  background-color: rgb(179, 209, 228);
+}
+
+.profile-information {
+  margin: 5%;
+}
+
+#duck-ui {
+  height: 100%;
+  width: 100%;
+  transition: transform .7s ease-in-out;
+}
+
+#duck-ui:hover {
+  transform: rotate(360deg);
+  content: url("https://www.comp.nus.edu.sg/stfphotos/shashank.jpg");
+}
+
+.welcome-info {
+  margin-left: 3%;
+}
+
+#header-img {
+  width: 100%;
+  height: 145px;
+}
+
+.navbar {
+  width: 60px; /* Default, collapsed width */
+  height: 100vh;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: white;
+  overflow-x: hidden; /* Ensure content does not cause horizontal scrollbar */
+  padding-top: 20px;
+  padding-left: 10px;
+  display: inline-block;
+  transition: width 0.5s; /* Smooth transition for expanding and collapsing */
+}
+
+.navbar:hover {
+  width: 15%; /* Width on hover */
+}
+
+.left-nav ul {
+  list-style-type: none;
+  margin-top: 20px;
+}
+
+.left-nav ul li {
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  text-decoration: none;
+  font-size: 15px;
+  color: black;
+  display: block;
+}
+
+.left-nav ul li:hover {
+  background-color: rgb(179, 209, 228);
+}
+
+/* Initial state of the content, matching the collapsed navbar width */
+.content {
+  margin-left: 60px; /* Initial margin to match the collapsed navbar width */
+  transition: margin-left 0.5s; /* Smooth transition for the margin change */
+}
+
+/* When the navbar is hovered over, adjust content margin to match the expanded navbar */
+.navbar:hover + .content {
+  margin-left: 15%; /* Adjusted margin to match the expanded navbar width */
+}
+
+.modal {
+  position: fixed; /* Use fixed positioning */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for exact centering */
+  width: 60%; 
+  max-width: 600px; /* Optional: max-width for larger screens */
+  background-color: white; 
+  padding: 20px; 
+  border: 1px none #000; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow for better visibility */
+  z-index: 1000; /* Ensure it sits above other content */
+}
+
+/* Style for the background overlay (optional) */
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.5); /* Semi-transparent background */
+z-index: 999; /* Below the modal but above other content */
+}
+
+.modal-content h1 { 
+  color:darkblue;
+}
+.close { 
+  float: right;
+}
