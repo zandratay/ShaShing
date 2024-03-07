@@ -63,6 +63,44 @@ h1 {
   background-color: rgb(179, 209, 228);
 }
 
+/* card for the Stock Respository page */
+.card {
+  width: 85%;
+  height: 60px; 
+  background-color: white; 
+  display: flex;
+  padding-left: 20px;
+  color: rgb(31, 43, 109);
+  justify-content: left; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  box-shadow: var(--box-shadow);
+  margin-bottom: 20px;
+}
+
+.card.expanded {
+  margin-bottom: 0px;
+}
+
+.cardExpand {
+  width: 85%;
+  background-color: rgb(216, 215, 215); 
+  display: grid;
+  padding-left: 20px;
+  color: rgb(31, 43, 109);
+  justify-content: left; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  box-shadow: var(--box-shadow);
+  margin-bottom: 20px;
+}
+
+.stock-repository-table {
+  margin: 10px;
+}
+
+/* .cardExpand p:first-child {
+  margin-top: 0px;
+} */
+
 .profile-information {
   margin: 5%;
 }
