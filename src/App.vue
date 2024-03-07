@@ -6,7 +6,7 @@
   
   <div class="content">
     <Header />
-    <component :is="currentComponent"></component>
+    <component :is="currentMainView"></component>
     <!-- <OverviewCharts /> -->
     <AssetClass />
   </div>
@@ -23,7 +23,7 @@
   export default {
     data(){
       return {
-        currentComponent: OverviewCharts
+        currentMainView: OverviewCharts
       }
     },
     components: {
@@ -36,10 +36,9 @@
       changePage(page) {
         console.log(page);
         if (page === 'A') {
-          this.currentComponent = OverviewCharts;
-          console.log('A')
+          this.currentMainView = OverviewCharts;
         } else {
-          this.currentComponent = StockRespository;
+          this.currentMainView = StockRespository;
         }
       }
     }

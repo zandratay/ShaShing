@@ -1,5 +1,7 @@
 <template>
-    <h1> Stock Respository page </h1>
+    <div class="welcome-info">
+        <h3> Stock Respository page </h3>
+    </div>
     <div class="graphs-container">
         <div class="charts">
             <h4> Total Profit </h4><br><br>

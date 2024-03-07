@@ -1,5 +1,10 @@
 <template>
+    <div class="welcome-info">
+        <h3> Current Portfolio </h3>
+    </div>
+    
     <div class="graphs-container">
+        
         <div class="charts">
             <h4> Total Profit </h4><br><br>
             <p> $1000 </p>
