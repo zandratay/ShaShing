@@ -79,7 +79,8 @@ h1 {
 }
 
 .welcome-info {
-  margin-left: 3%;
+  padding-left: 72px;
+  padding-right: 207px;
 }
 
 #header-img {
@@ -165,4 +166,11 @@ z-index: 999; /* Below the modal but above other content */
 }
 .close { 
   float: right;
+}
+
+.welcome-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  
 }

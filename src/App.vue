@@ -5,10 +5,11 @@
   </div>
   
   <div class="content">
-    <Header />
+    <Header @addInvestment="getData" />
     <OverviewCharts />
     <AssetClass />
-  </div>
+    <AddInvestment :isInvestment="addInvestment" @clicked="setData"/>
+    </div>
   
 </template>
 
@@ -17,14 +18,39 @@
   import OverviewCharts from  './homepage/OverviewCharts.vue';
   import AssetClass from  './homepage/AssetClass.vue';
   import NavBar from  './homepage/NavBar.vue';
+  import AddInvestment from './homepage/AddInvestment.vue'
 
   export default {
     components: {
       Header, 
       OverviewCharts,
       AssetClass,
-      NavBar
+      NavBar,
+      AddInvestment
+    },
+
+    data() {
+      return {
+        addInvestment: false,
+        clicked: false
+      }
+    },
+
+    methods: {
+      getData(data) {
+        this.addInvestment = data
+      },
+
+      setData(data) {
+        this.addInvestment = data
+      }
+
+
+    
     }
+
+
+
   }
 </script>
 
