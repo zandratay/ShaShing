@@ -95,6 +95,13 @@ h1 {
 
 .stock-repository-table {
   margin: 10px;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.stock-repository-table-head-row, .stock-repository-table-head-cell, .stock-repository-table-body-row, .stock-repository-table-body-cell {
+  border: 2px solid black;
+  
 }
 
 /* .cardExpand p:first-child {

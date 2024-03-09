@@ -1,9 +1,5 @@
 <template>
     <div class="assets-container">
-        <!-- <div class="assets" @click="openModal('Cash')"> <strong> Cash </strong> </div>
-        <div class="assets" @click="openModal('Stocks')"> <strong> Stocks </strong> </div>
-        <div class="assets" @click="openModal('Bonds')"> <strong> Bonds </strong> </div>
-        <div class="assets" @click="openModal('CPF')"> <strong> CPF </strong> </div> -->
         <div class="card" :class="{ expanded: isExpanded }" @click="isExpanded = !isExpanded">
             <div class="card-header">
                 <h2> Card Title </h2>
@@ -14,25 +10,26 @@
             <p> This is some content that will show up when the card is expanded. Click the card to toggle. </p>
             <table class = "stock-repository-table">
                 <thead>
-                    <tr>
-                        <th v-for="header in ['test', 'hi', 'there']" > {{ header }} </th>
+                    <tr class = "stock-repository-table-head-row">
+                        <th v-for="header in tableHeader" class = "stock-repository-table-head-cell"> 
+                            {{ header }} 
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="row in [1,2,4]">
-                        <td v-for="cell in ['test', 'hi', 'there']">
+                    <tr v-for="row in rowsPerPage" class = "stock-repository-table-body-row">
+                        <td v-for="cell in dummyCells.slice(sliceFillingsToTable().beginning, sliceFillingsToTable().end)[row - 1]" class = "stock-repository-table-body-cell">
                             {{ cell }}
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <p style = "text-align: center;"> Page at: {{ pageAt }} of {{ totalPages() }}</p>
+            <button @click="previousPage()"> previous </button>
+            <button @click="nextPage()"> next </button>
         </div>
 
         <p> {{ filings }} </p>
-        <!-- <CashModal v-model:isVisible="modals.cash" />
-        <StocksModal v-model:isVisible="modals.stocks" />
-        <BondsModal v-model:isVisible="modals.bonds" />
-        <CPFModal v-model:isVisible="modals.cpf" /> -->
     </div>
 </template>
 
@@ -55,33 +52,28 @@ export default {
     data() {
         return {
             isExpanded: false,
-            modals: {
-                cash: false,
-                stocks: false,
-                bonds: false,
-                cpf: false
-            },
-            apiKey: '1cd758d99b72ba099d116f339f8bc0170ca1bfc1665c25189dddcbc4ca107748',
+            stockList: ["AAPL", 'MSFT'],
+            apiKey: '2d9f5b055f186cd9e147ffe1764fafbb5b9e0125290e7b703a8bd939e7cb932a',
             filings: null,
+            tableHeader: ['Date', 'Report Type', 'Link'],
+            pageAt: 1,
+            rowsPerPage: 5,
+            dummyCells: [[1,2,3],[4,5,6],[7,8,9],[10,11,"hi"],[13,14,15], [16,17,18], [19,20,1]]
         };
     },
     methods: {
-        openModal(asset) {
-            // First, set all modals to false to ensure only one can be open at a time
-            for (let key in this.modals) {
-                this.modals[key] = false;
-            }
+        queryString(listOfTickers) {
+            let qString = ""
+            for (let i = 0; i < listOfTickers.length; i++) {
+                qString += listOfTickers[i]
+                if (i != listOfTickers.length - 1) {
+                    qString += " OR "
+                }
+                // console.log(listOfTickers[i]);
+            };
+            console.log(qString)
+            return qString
             
-            // Now, open the correct modal
-            if (asset === 'Cash') {
-                this.modals.cash = true;
-            } else if (asset === 'Bonds') {
-                this.modals.bonds = true;
-            } else if (asset === 'Stocks') {
-                this.modals.stocks = true;
-            } else if (asset === 'CPF') {
-                this.modals.cpf = true;
-            }
         },
         async fetchData(ticker) {
             const postData = {
@@ -104,14 +96,15 @@ export default {
             try {
                 const response = await axios(options);
                 let fil = response.data.filings;
+                // console.log(fil);
+
                 // filter filings to be exactly based on ticker inserted and exact quarterly financial report
-                fil = fil.filter(function (el) {
-                    return el.ticker == ticker ;
+                fil = fil.filter((el) => {
+                    return this.stockList.includes(el.ticker);
                 });
+                // console.log(fil);
 
                 fil = fil.filter(function (el) {
-                    // console.log(el.formType);
-                    // console.log(el);
                     return el.description == "10-Q" ;
                 });
 
@@ -123,12 +116,33 @@ export default {
             } catch (error) {
                 this.error = error.toString();
             }
+        },
+        nextPage(){
+            if (this.pageAt < this.totalPages()) {
+                this.pageAt += 1
+            }
+        },
+        previousPage(){
+            if (this.pageAt > 1) {
+                this.pageAt -= 1
+            }
+        },
+        totalPages(){
+            // console.log(Math.ceil(this.dummyCells.length / this.rowsPerPage))
+            return Math.ceil(this.dummyCells.length / this.rowsPerPage);
+        },
+        sliceFillingsToTable() {
+            let beginningRowToSliceAt = (this.pageAt - 1) * this.rowsPerPage;
+            let lastRowToSliceAt = (this.pageAt - 1) * this.rowsPerPage + this.rowsPerPage
+            return { beginning: beginningRowToSliceAt, end: lastRowToSliceAt}
         }
 
         
     },
     mounted() {
-        this.fetchData("META");
+        let queueString = this.queryString(this.stockList);
+        this.fetchData("\"AAPL\" OR \"MSFT\"");
+        //"Gasoline \"Sacramento CA\" OR \"San Francisco CA\""
     }
 }
 </script>
