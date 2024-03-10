@@ -91,11 +91,12 @@ h1 {
   background-color: rgb(216, 215, 215); 
   display: grid;
   padding-left: 20px;
+  padding-bottom: 10px;
   color: rgb(31, 43, 109);
   justify-content: left; /* Center content horizontally */
   align-items: center; /* Center content vertically */
   box-shadow: var(--box-shadow);
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .stock-repository-table {

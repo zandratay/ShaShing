@@ -1,12 +1,12 @@
 <template>
     <div v-for="c in stockList" class="card-container">
-        <div class="card" :class="{ expanded: isExpanded }" @click="isExpanded = !isExpanded">
+        <div class="card" :class="{ expanded: cardsParameters.find((x) => x.stock == c)?.isExpanded }" @click="toggleExpand(c)">
             <div class="card-header">
                 <h2> {{ c }} </h2>
             </div>
         </div>
 
-        <div class="cardExpand" v-show="isExpanded">
+        <div class="cardExpand" v-show="cardsParameters.find(x => x.stock == c)?.isExpanded">
             <p> This is some content that will show up when the card is expanded. Click the card to toggle. </p>
             <table class = "stock-repository-table">
                 <thead>
@@ -30,7 +30,7 @@
         </div>
 
     </div>
-    <p> {{ filings }} </p>
+    <!-- <p> {{ filings }} </p> -->
 
 </template>
 
@@ -42,20 +42,23 @@ export default {
     data() {
         return {
             isExpanded: false,
-            stockList: ["AAPL", 'MSFT'],
+            stockList: ["AAPL", "NVDA", "MSFT"],
+            cardsParameters: [],
+            // cardsParameters: this.stockList.map(stock => ({ stock: stock, isExpanded: false, pageAt = 1 })),
             apiKey: '2d9f5b055f186cd9e147ffe1764fafbb5b9e0125290e7b703a8bd939e7cb932a',
             filings: [],
             tableHeader: ['Date', 'Report Type', 'Link'],
             pageAt: 1,
-            rowsPerPage: 5,
-            dummyCells: [[1,2,3],[4,5,6],[7,8,9],[10,11,"hi"],[13,14,15], [16,17,18], [19,20,1],[1,2,3],[4,5,6],[7,8,9],[10,11,"hi"],[13,14,15], [16,17,18], [19,20,1]]
+            rowsPerPage: 5
         };
     },
     methods: {
         queryString(listOfTickers) {
             let qString = ""
             for (let i = 0; i < listOfTickers.length; i++) {
+                // qString += '\"'
                 qString += listOfTickers[i]
+                // qString += '\"'
                 if (i != listOfTickers.length - 1) {
                     qString += " OR "
                 }
@@ -68,8 +71,9 @@ export default {
             const postData = {
                 query: ticker,
                 formTypes: ["10-Q"],
-                startDate: "2018-12-31",
-                endDate: "2024-02-10"
+                startDate: "2019-02-10",
+                endDate: "2024-02-10",
+                page: "1"
             };
 
             const options = {
@@ -85,6 +89,7 @@ export default {
             try {
                 const response = await axios(options);
                 let fil = response.data.filings;
+                console.log(fil);
 
                 // filter filings to be exactly based on ticker inserted and exact quarterly financial report
                 fil = fil.filter((el) => {
@@ -93,13 +98,15 @@ export default {
 
                 fil = fil.filter(function (el) {
                     return el.description == "10-Q";
-                });
+                })
 
                 // sort filings based on newest filings first
                 fil = fil.sort((x, y) => {
                     return new Date(x.filedAt) < new Date(y.filedAt) ? 1 : -1;
                 })
                 this.filings = fil;
+                console.log(fil);
+
             } catch (error) {
                 this.error = error.toString();
             }
@@ -116,14 +123,6 @@ export default {
                     'URL':item.filingUrl
                 }
             });
-            // console.log(stockFillings);
-            // let detailStockFilings = {
-            //     'detail': stockFillings,
-            //     'length': stockFillings.length
-            // } 
-
-            // let slicedStockFilings = detailStockFilings.detail.slice(sliceFillingsToTable().beginning, sliceFillingsToTable().end)
-            
             return stockFillings;
         },
         nextPage(arr){
@@ -143,12 +142,22 @@ export default {
             let beginningRowToSliceAt = (this.pageAt - 1) * this.rowsPerPage;
             let lastRowToSliceAt = (this.pageAt - 1) * this.rowsPerPage + this.rowsPerPage
             return { beginning: beginningRowToSliceAt, end: lastRowToSliceAt }
-        }
-
-        
+        },
+        toggleExpand(st) {
+            let obj = this.cardsParameters.find(x => x.stock == st);
+            // console.log(obj);
+            // console.log(this.cardsParameters);
+            if (obj) {
+                obj.isExpanded = !obj.isExpanded; 
+                return obj.isExpanded; 
+            } 
+            return null;
+        },        
     },
     async mounted() {
+        this.cardsParameters = this.stockList.map(stock => ({ stock: stock, isExpanded: false, pageAt: 1 }));
         let queueString = this.queryString(this.stockList);
+        console.log(queueString);
         await this.fetchData(queueString);
     }
 }
