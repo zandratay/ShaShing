@@ -63,6 +63,11 @@ h1 {
   background-color: rgb(179, 209, 228);
 }
 
+.card-container {
+  margin-left: 5%;
+  margin-top: 20px;
+}
+
 /* card for the Stock Respository page */
 .card {
   width: 85%;

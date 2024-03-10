@@ -1,8 +1,8 @@
 <template>
-    <div class="assets-container">
+    <div v-for="c in stockList" class="card-container">
         <div class="card" :class="{ expanded: isExpanded }" @click="isExpanded = !isExpanded">
             <div class="card-header">
-                <h2> Card Title </h2>
+                <h2> {{ c }} </h2>
             </div>
         </div>
 
@@ -18,47 +18,37 @@
                 </thead>
                 <tbody>
                     <tr v-for="row in rowsPerPage" class = "stock-repository-table-body-row">
-                        <td v-for="cell in dummyCells.slice(sliceFillingsToTable().beginning, sliceFillingsToTable().end)[row - 1]" class = "stock-repository-table-body-cell">
+                        <td v-for="cell in specificStockFillings(c).slice(sliceFillingsToTable().beginning, sliceFillingsToTable().end)[row - 1]" class = "stock-repository-table-body-cell">
                             {{ cell }}
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <p style = "text-align: center;"> Page at: {{ pageAt }} of {{ totalPages() }}</p>
+            <p style = "text-align: center;"> Page at: {{ pageAt }} of {{ totalPages(specificStockFillings(c)) }}</p>
             <button @click="previousPage()"> previous </button>
-            <button @click="nextPage()"> next </button>
+            <button @click="nextPage(specificStockFillings(c))"> next </button>
         </div>
 
-        <p> {{ filings }} </p>
     </div>
+    <p> {{ filings }} </p>
+
 </template>
 
 
 <script>
-import CashModal from './CashModal.vue'; 
-import BondsModal from './BondsModal.vue'; 
-import StocksModal from './StocksModal.vue'; 
-import CPFModal from './CPFModal.vue'; 
-
 import axios from 'axios';
 
 export default {
-    components: {
-        CashModal,
-        BondsModal,
-        StocksModal,
-        CPFModal
-    },
     data() {
         return {
             isExpanded: false,
             stockList: ["AAPL", 'MSFT'],
             apiKey: '2d9f5b055f186cd9e147ffe1764fafbb5b9e0125290e7b703a8bd939e7cb932a',
-            filings: null,
+            filings: [],
             tableHeader: ['Date', 'Report Type', 'Link'],
             pageAt: 1,
             rowsPerPage: 5,
-            dummyCells: [[1,2,3],[4,5,6],[7,8,9],[10,11,"hi"],[13,14,15], [16,17,18], [19,20,1]]
+            dummyCells: [[1,2,3],[4,5,6],[7,8,9],[10,11,"hi"],[13,14,15], [16,17,18], [19,20,1],[1,2,3],[4,5,6],[7,8,9],[10,11,"hi"],[13,14,15], [16,17,18], [19,20,1]]
         };
     },
     methods: {
@@ -69,7 +59,6 @@ export default {
                 if (i != listOfTickers.length - 1) {
                     qString += " OR "
                 }
-                // console.log(listOfTickers[i]);
             };
             console.log(qString)
             return qString
@@ -79,7 +68,7 @@ export default {
             const postData = {
                 query: ticker,
                 formTypes: ["10-Q"],
-                startDate: "2021-12-31",
+                startDate: "2018-12-31",
                 endDate: "2024-02-10"
             };
 
@@ -96,16 +85,14 @@ export default {
             try {
                 const response = await axios(options);
                 let fil = response.data.filings;
-                // console.log(fil);
 
                 // filter filings to be exactly based on ticker inserted and exact quarterly financial report
                 fil = fil.filter((el) => {
                     return this.stockList.includes(el.ticker);
                 });
-                // console.log(fil);
 
                 fil = fil.filter(function (el) {
-                    return el.description == "10-Q" ;
+                    return el.description == "10-Q";
                 });
 
                 // sort filings based on newest filings first
@@ -117,8 +104,30 @@ export default {
                 this.error = error.toString();
             }
         },
-        nextPage(){
-            if (this.pageAt < this.totalPages()) {
+        specificStockFillings(stockTicker) {
+            let stockFillings = this.filings.filter((x) => {
+                return x.ticker == stockTicker;
+            });
+
+            stockFillings = stockFillings.map((item) => {
+                return {
+                    'date':item.filedAt,
+                    'reportType':item.formType,
+                    'URL':item.filingUrl
+                }
+            });
+            // console.log(stockFillings);
+            // let detailStockFilings = {
+            //     'detail': stockFillings,
+            //     'length': stockFillings.length
+            // } 
+
+            // let slicedStockFilings = detailStockFilings.detail.slice(sliceFillingsToTable().beginning, sliceFillingsToTable().end)
+            
+            return stockFillings;
+        },
+        nextPage(arr){
+            if (this.pageAt < this.totalPages(arr)) {
                 this.pageAt += 1
             }
         },
@@ -127,22 +136,20 @@ export default {
                 this.pageAt -= 1
             }
         },
-        totalPages(){
-            // console.log(Math.ceil(this.dummyCells.length / this.rowsPerPage))
-            return Math.ceil(this.dummyCells.length / this.rowsPerPage);
+        totalPages(arr){
+            return Math.ceil(arr.length / this.rowsPerPage);
         },
         sliceFillingsToTable() {
             let beginningRowToSliceAt = (this.pageAt - 1) * this.rowsPerPage;
             let lastRowToSliceAt = (this.pageAt - 1) * this.rowsPerPage + this.rowsPerPage
-            return { beginning: beginningRowToSliceAt, end: lastRowToSliceAt}
+            return { beginning: beginningRowToSliceAt, end: lastRowToSliceAt }
         }
 
         
     },
-    mounted() {
+    async mounted() {
         let queueString = this.queryString(this.stockList);
-        this.fetchData("\"AAPL\" OR \"MSFT\"");
-        //"Gasoline \"Sacramento CA\" OR \"San Francisco CA\""
+        await this.fetchData(queueString);
     }
 }
 </script>
