@@ -79,8 +79,10 @@ h1 {
 }
 
 .welcome-info {
-  padding-left: 72px;
-  padding-right: 207px;
+  margin-left: 5%;
+  margin-right: 14.2%;
+  margin-top: 20px;
+  background-color: green
 }
 
 #header-img {
@@ -173,4 +175,23 @@ z-index: 999; /* Below the modal but above other content */
   flex-direction: row;
   justify-content: space-between;
   
+}
+
+.investment {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.selectInvestment {
+  margin-top: 20px;
+  background-color:rgb(179, 209, 228);
+  width:fit-content;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.forms {
+  display: flex;
+  flex-direction: column
 }

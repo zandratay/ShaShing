@@ -17,7 +17,6 @@ import CashModal from './CashModal.vue';
 import BondsModal from './BondsModal.vue'; 
 import StocksModal from './StocksModal.vue'; 
 import CPFModal from './CPFModal.vue'; 
-import AddInvestment from './AddInvestment.vue';
 
 export default {
 
