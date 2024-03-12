@@ -82,7 +82,6 @@ h1 {
   margin-left: 5%;
   margin-right: 14.2%;
   margin-top: 20px;
-  background-color: green
 }
 
 #header-img {
@@ -152,6 +151,20 @@ h1 {
   z-index: 1000; /* Ensure it sits above other content */
 }
 
+.modal-investment {
+  position: fixed; /* Use fixed positioning */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for exact centering */
+  width: 60%; 
+  max-width: 300px; /* Optional: max-width for larger screens */
+  background-color: white; 
+  padding: 20px; 
+  border: 1px none #000; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow for better visibility */
+  z-index: 1000; /* Ensure it sits above other content */
+}
+
 /* Style for the background overlay (optional) */
 .modal-overlay {
 position: fixed;
@@ -201,6 +214,20 @@ z-index: 999; /* Below the modal but above other content */
   background-color: transparent
 }
 
+.buttonBgFit {
+  border: none;
+  background-color: transparent;
+  width: 25px;
+  color: rgba(102, 102, 102, 0.90);
+}
+
+.buttonBgPlus {
+  border: none;
+  background-color: transparent;
+  width: 25px;
+  color: black;
+  margin-top: 25px;
+}
 
 .forms {
   display: flex;
@@ -230,8 +257,9 @@ z-index: 999; /* Below the modal but above other content */
   padding: 3px;
   background-color: #F9F9F9;
   color: rgba(0, 0, 0, 0.45);
-  
   margin-top: 5px;
+  display: flex;
+  align-content: center;
 }
 
 .selectButtons {
@@ -240,10 +268,13 @@ z-index: 999; /* Below the modal but above other content */
   padding: 5px;
   background-color: white;
   color: gray;
-  
+  display: flex;
+  align-content: center;
   margin-top: 5px;
   border: 1px solid rgba(102, 102, 102, 0.35);
 }
+
+
 
 .selectInputs {
   width:180px;
@@ -253,6 +284,7 @@ z-index: 999; /* Below the modal but above other content */
   color: gray;
   margin-top: 5px;
   border: 1px solid rgba(102, 102, 102, 0.35);
+  line-height: 0.8;
 }
 
 .whiteButton {
@@ -266,11 +298,40 @@ z-index: 999; /* Below the modal but above other content */
   padding: 5px;
   border-radius: 15px;
   background-color:#164F92;
-  margin-top: 20px;
+  margin-top: 40px;
   text-align: center;
-  color: white
+  color: white;
+  display: flex;
+  justify-content: center;
 }
 
 .formDiv {
   margin-top: 20px;
+}
+
+.inputDiv {
+  margin-top: 20px;
+}
+
+.selectInvestmentAdjusted {
+  width:260px;
+  border-radius: 7px;
+  padding: 10px;
+  background-color: white;
+  color: gray;
+  margin-top: 5px;
+  border: 1px solid rgba(102, 102, 102, 0.35);
+  display: flex;
+  align-content: center;
+}
+
+.investmentsAdjusted {
+  width:260px;
+  border-radius: 7px;
+  padding: 3px;
+  background-color: #F9F9F9;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 5px;
+  display: flex;
+  align-content: center;
 }
