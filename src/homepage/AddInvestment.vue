@@ -2,45 +2,51 @@
   <div>
     <div class="modal" v-if="isInvestment">
       <div class="investment">
-        <div><text>Select your investment type</text></div>
-
+        <div class="addInvestment"><text>Add Investment</text></div>
         <div><button @click="clicked">Close</button></div>
       </div>
-      <div class="selectInvestment">
-        <button @click="openDropDown">
+      
+      <div class="investmentType">
+        <div>
+        <text>Investment Type</text>
+      </div>
+        <div class="selectInvestment">
+          <button @click="openDropDown" class="buttonBg">
           <text>{{
             selectedInvestment ? selectedInvestment : "Select investment type"
           }}</text>
         </button>
+
+        </div>
+        
         <div v-if="dropDown">
-          <div>
-            <button @click="selectInvestment('Cash')"><text>Cash</text></button>
+          <div class="investments">
+            <button @click="selectInvestment('Cash')" class="buttonBg"><text>Cash</text></button>
           </div>
-          <div>
-            <button @click="selectInvestment('Stocks')">
+          <div class="investments">
+            <button @click="selectInvestment('Stocks')" class="buttonBg">
               <text>Stocks</text>
             </button>
           </div>
-          <div>
-            <button @click="selectInvestment('CPF')"><text>CPF</text></button>
+          <div class="investments">
+            <button @click="selectInvestment('CPF')" class="buttonBg"><text>CPF</text></button>
           </div>
-          <div>
-            <button @click="selectInvestment('Bonds')">
+          <div class="investments">
+            <button @click="selectInvestment('Bonds')" class="buttonBg">
               <text>Bonds</text>
             </button>
           </div>
-          <div>
-            <button @click="selectInvestment('Others')">
+          <div class="investments">
+            <button @click="selectInvestment('Others')" class="buttonBg">
               <text>Others</text>
             </button>
           </div>
         </div>
       </div>
-      <div>
-        <button @click="openInputModal">Next</button>
+      <div class="nextButton">
+        <button @click="openInputModal" class="whiteButton">Next</button>
       </div>
     </div>
-
     <CashInputModal v-model:isOpened="isCash" @isEmitCash="setDataCash"/>
     <CPFInputModal v-model:isOpened="isCPF" @isEmitCPF="setDataCPF"/>
     <BondsInputModal v-model:isOpened="isBonds" @isEmitBonds="setDataBonds"/>

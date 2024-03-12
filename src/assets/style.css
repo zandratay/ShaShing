@@ -184,14 +184,93 @@ z-index: 999; /* Below the modal but above other content */
 }
 
 .selectInvestment {
-  margin-top: 20px;
-  background-color:rgb(179, 209, 228);
-  width:fit-content;
-  border-radius: 10px;
+  width:180px;
+  border-radius: 7px;
   padding: 10px;
+  background-color: white;
+  color: gray;
+  text-align: center;
+  margin-top: 5px;
+  border: 1px solid rgba(102, 102, 102, 0.35);
 }
+
+.buttonBg {
+  
+  border: none;
+  color: gray;
+  background-color: transparent
+}
+
 
 .forms {
   display: flex;
   flex-direction: column
+}
+
+.endButton {
+  display: flex;
+  width: fit-content;
+  justify-items: end;
+  
+}
+
+.addInvestment {
+  color: #164F92;
+  font-size: large;
+  font-weight: bold;
+}
+
+.investmentType {
+  margin-top: 20px
+}
+
+.investments {
+  width:180px;
+  border-radius: 7px;
+  padding: 3px;
+  background-color: #F9F9F9;
+  color: rgba(0, 0, 0, 0.45);
+  
+  margin-top: 5px;
+}
+
+.selectButtons {
+  width:180px;
+  border-radius: 7px;
+  padding: 5px;
+  background-color: white;
+  color: gray;
+  
+  margin-top: 5px;
+  border: 1px solid rgba(102, 102, 102, 0.35);
+}
+
+.selectInputs {
+  width:180px;
+  border-radius: 7px;
+  padding: 7px;
+  background-color: white;
+  color: gray;
+  margin-top: 5px;
+  border: 1px solid rgba(102, 102, 102, 0.35);
+}
+
+.whiteButton {
+  color: white;
+  background-color: transparent;
+  border: none;
+}
+
+.nextButton {
+  width: 100px;
+  padding: 5px;
+  border-radius: 15px;
+  background-color:#164F92;
+  margin-top: 20px;
+  text-align: center;
+  color: white
+}
+
+.formDiv {
+  margin-top: 20px;
 }
