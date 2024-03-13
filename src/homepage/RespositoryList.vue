@@ -1,14 +1,14 @@
 <template>
     <div v-for="c in stockList" class="card-container">
-        <div class="card" :class="{ expanded: cardsParameters.find((x) => x.stock == c)?.isExpanded }" @click="toggleExpand(c)">
+        <div class="card" :class="{ expanded: isStockCardExpanded(c) }" @click="toggleExpand(c)">
             <div class="card-header">
                 <h2> {{ c }} </h2>
             </div>
         </div>
 
-        <div class="cardExpand" v-show="cardsParameters.find(x => x.stock == c)?.isExpanded">
+        <div class="cardExpand" v-show="isStockCardExpanded(c)">
             <p> This is some content that will show up when the card is expanded. Click the card to toggle. </p>
-            <table class = "stock-repository-table">
+            <table class = "stock-repository-table" >
                 <thead>
                     <tr class = "stock-repository-table-head-row">
                         <th v-for="header in tableHeader" class = "stock-repository-table-head-cell"> 
@@ -17,16 +17,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="row in rowsPerPage" class = "stock-repository-table-body-row">
-                        <td v-for="cell in specificStockFillings(c).slice(sliceFillingsToTable().beginning, sliceFillingsToTable().end)[row - 1]" class = "stock-repository-table-body-cell">
-                            {{ cell }}
+                    <tr v-for="row in getDataForStock(c)?.slice(sliceFillingsToTable(c).beginning, sliceFillingsToTable(c).end)" class = "stock-repository-table-body-row">
+                        <td v-for="cell in row" class = "stock-repository-table-body-cell">
+                            {{ cell }} 
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <p style = "text-align: center;"> Page at: {{ pageAt }} of {{ totalPages(specificStockFillings(c)) }}</p>
-            <button @click="previousPage()"> previous </button>
-            <button @click="nextPage(specificStockFillings(c))"> next </button>
+            <p style = "text-align: center"> Page at: {{ cPage(c) }} of {{ tPages(c) }}</p>
+            <button @click="pPage(c)"> previous </button>
+            <button @click="nPage(c)"> next </button>
         </div>
 
     </div>
@@ -41,124 +41,122 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            isExpanded: false,
             stockList: ["AAPL", "NVDA", "MSFT"],
             cardsParameters: [],
-            // cardsParameters: this.stockList.map(stock => ({ stock: stock, isExpanded: false, pageAt = 1 })),
-            apiKey: '2d9f5b055f186cd9e147ffe1764fafbb5b9e0125290e7b703a8bd939e7cb932a',
-            filings: [],
+            apiKey: 'cno43t1r01qpkl7ddec0cno43t1r01qpkl7ddecg',
             tableHeader: ['Date', 'Report Type', 'Link'],
             pageAt: 1,
             rowsPerPage: 5
         };
     },
     methods: {
-        queryString(listOfTickers) {
-            let qString = ""
-            for (let i = 0; i < listOfTickers.length; i++) {
-                // qString += '\"'
-                qString += listOfTickers[i]
-                // qString += '\"'
-                if (i != listOfTickers.length - 1) {
-                    qString += " OR "
-                }
-            };
-            console.log(qString)
-            return qString
-            
-        },
-        async fetchData(ticker) {
-            const postData = {
-                query: ticker,
-                formTypes: ["10-Q"],
-                startDate: "2019-02-10",
-                endDate: "2024-02-10",
-                page: "1"
-            };
-
-            const options = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': this.apiKey
-                },
-                url: 'https://api.sec-api.io/full-text-search',
-                data: postData
-            };
-
+        async stockFillingsToCardList(stockTicker) {
             try {
-                const response = await axios(options);
-                let fil = response.data.filings;
-                console.log(fil);
-
-                // filter filings to be exactly based on ticker inserted and exact quarterly financial report
-                fil = fil.filter((el) => {
-                    return this.stockList.includes(el.ticker);
+                const res = await axios.get(`https://finnhub.io/api/v1/stock/filings?symbol=${stockTicker}&form=10-Q&token=${this.apiKey}`)
+                const returnData = res.data.map((item) => {
+                    return {
+                        'date':item.acceptedDate,
+                        'reportType':item.form,
+                        'URL':item.reportUrl
+                    }
                 });
-
-                fil = fil.filter(function (el) {
-                    return el.description == "10-Q";
-                })
-
-                // sort filings based on newest filings first
-                fil = fil.sort((x, y) => {
-                    return new Date(x.filedAt) < new Date(y.filedAt) ? 1 : -1;
-                })
-                this.filings = fil;
-                console.log(fil);
-
-            } catch (error) {
-                this.error = error.toString();
+                // console.log(returnData);
+                return returnData;
+            } catch (e) {
+                console.log(e);
+                return;
             }
         },
-        specificStockFillings(stockTicker) {
-            let stockFillings = this.filings.filter((x) => {
-                return x.ticker == stockTicker;
-            });
+        sliceFillingsToTable(stockTicker) {
+            const objIndex = this.cardsParameters.findIndex(obj => obj.stock === stockTicker);
+            let pgAt = 1;
+            if (objIndex !== -1) { 
+                pgAt = this.cardsParameters[objIndex].pageAt;
+            }
 
-            stockFillings = stockFillings.map((item) => {
-                return {
-                    'date':item.filedAt,
-                    'reportType':item.formType,
-                    'URL':item.filingUrl
-                }
-            });
-            return stockFillings;
-        },
-        nextPage(arr){
-            if (this.pageAt < this.totalPages(arr)) {
-                this.pageAt += 1
-            }
-        },
-        previousPage(){
-            if (this.pageAt > 1) {
-                this.pageAt -= 1
-            }
-        },
-        totalPages(arr){
-            return Math.ceil(arr.length / this.rowsPerPage);
-        },
-        sliceFillingsToTable() {
-            let beginningRowToSliceAt = (this.pageAt - 1) * this.rowsPerPage;
-            let lastRowToSliceAt = (this.pageAt - 1) * this.rowsPerPage + this.rowsPerPage
+            let beginningRowToSliceAt = (pgAt - 1) * this.rowsPerPage;
+            let lastRowToSliceAt = (pgAt - 1) * this.rowsPerPage + this.rowsPerPage
             return { beginning: beginningRowToSliceAt, end: lastRowToSliceAt }
         },
         toggleExpand(st) {
+            // toggleExpands also makes sure that all other cards are minimised and pageAt for all cards are reset to 1
             let obj = this.cardsParameters.find(x => x.stock == st);
-            // console.log(obj);
-            // console.log(this.cardsParameters);
             if (obj) {
-                obj.isExpanded = !obj.isExpanded; 
-                return obj.isExpanded; 
+                let nextState = !obj.isExpanded; 
+                this.cardsParameters = this.cardsParameters.map((obj, i) => {
+                    return { ...obj, pageAt:1, isExpanded: false }
+                });
+
+                const objIndex = this.cardsParameters.findIndex(obj => obj.stock == st);
+                if (objIndex !== -1) { 
+                    this.cardsParameters[objIndex].isExpanded = nextState;
+                }
+                
+                return nextState; 
             } 
             return null;
-        },        
+        },  
+        isStockCardExpanded(stockTicker) {
+            const objIndex = this.cardsParameters.findIndex(obj => obj.stock === stockTicker);
+            if (objIndex !== -1) { 
+                return this.cardsParameters[objIndex].isExpanded;
+            }
+            return false;
+        },
+        getDataForStock(stockTicker) {
+            const objIndex = this.cardsParameters.findIndex(obj => obj.stock === stockTicker);
+            if (objIndex !== -1) { 
+                return this.cardsParameters[objIndex].data;
+            }
+            return [];
+        },
+        tPages(stockTicker){
+            const objIndex = this.cardsParameters.findIndex(obj => obj.stock === stockTicker);
+            if (objIndex !== -1) { 
+                let len = this.cardsParameters[objIndex].data.length;
+                return Math.ceil(len / this.rowsPerPage);
+            }
+            return 1;
+        },
+        cPage(stockTicker) {
+            const objIndex = this.cardsParameters.findIndex(obj => obj.stock === stockTicker);
+            if (objIndex !== -1) { 
+                return this.cardsParameters[objIndex].pageAt;
+            }
+            return 1;
+        },
+        nPage(stockTicker) {
+            const objIndex = this.cardsParameters.findIndex(obj => obj.stock === stockTicker);
+            if (objIndex !== -1) { 
+                let pgAt = this.cardsParameters[objIndex].pageAt
+                if (pgAt < this.tPages(stockTicker)) {
+                    this.cardsParameters[objIndex].pageAt = pgAt + 1;
+                }   
+            }
+        },
+        pPage(stockTicker) {
+            const objIndex = this.cardsParameters.findIndex(obj => obj.stock === stockTicker);
+            if (objIndex !== -1) { 
+                let pgAt = this.cardsParameters[objIndex].pageAt
+                if (pgAt > 1) {
+                    this.cardsParameters[objIndex].pageAt = pgAt - 1;
+                }  
+            }
+        }      
     },
     async mounted() {
-        this.cardsParameters = this.stockList.map(stock => ({ stock: stock, isExpanded: false, pageAt: 1 }));
-        let queueString = this.queryString(this.stockList);
-        console.log(queueString);
-        await this.fetchData(queueString);
+        const filingsPromises =  this.stockList.map(stock => this.stockFillingsToCardList(stock));
+        const filingsResults = await Promise.all(filingsPromises);
+
+        this.cardsParameters = this.stockList.map((stock, index) => ({
+            stock: stock,
+            isExpanded: false,
+            pageAt: 1,
+            data: filingsResults[index]
+        }));
+
+        // console.log(this.cardsParameters);
+
     }
 }
 </script>
