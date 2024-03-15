@@ -101,6 +101,7 @@ h1 {
 
 .stock-repository-table {
   margin: 10px;
+  width: 100%;
   border-collapse: collapse;
   text-align: center;
 }

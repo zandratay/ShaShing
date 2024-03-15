@@ -30,7 +30,6 @@
         </div>
 
     </div>
-    <!-- <p> {{ filings }} </p> -->
 
 </template>
 
@@ -41,7 +40,7 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            stockList: ["AAPL", "NVDA", "MSFT"],
+            stockList: ["AAPL", "NVDA", "MSFT", "JPM", "MS"],
             cardsParameters: [],
             apiKey: 'cno43t1r01qpkl7ddec0cno43t1r01qpkl7ddecg',
             tableHeader: ['Date', 'Report Type', 'Link'],
@@ -94,7 +93,7 @@ export default {
                 
                 return nextState; 
             } 
-            return null;
+            return false;
         },  
         isStockCardExpanded(stockTicker) {
             const objIndex = this.cardsParameters.findIndex(obj => obj.stock === stockTicker);
