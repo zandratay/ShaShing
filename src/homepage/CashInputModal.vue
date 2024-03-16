@@ -58,12 +58,22 @@
         </div>
       </div>
       <div class="nextButton">
-        <button class="whiteButton">Submit</button>
+        <button class="whiteButton" @click="submit">Submit</button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  setDoc,
+  getDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import app from "../firebase";
 import { X } from "lucide-react";
 export default {
   props: ["isOpened"],
@@ -84,6 +94,9 @@ export default {
   methods: {
     close() {
       this.$emit("isEmitCash", false);
+      this.selectedInvestment = "";
+      this.amount = "";
+      this.purchaseDate = "";
     },
 
     openDropDown() {
@@ -94,6 +107,31 @@ export default {
       this.selectedInvestment = investmentType;
       this.dropDown = false;
     },
+
+    async submit() {
+      const userId = '177889'
+      var db = getFirestore(app);
+      const docRef = doc(db, "users", userId)
+      const data = await getDoc(docRef)
+
+      if (!data.exists()) {
+        await setDoc(docRef, {
+          id: userId, 
+          cash: [{ selectedInvestment: this.selectedInvestment, amount: this.amount, purchaseDate: this.purchaseDate } ],
+          bonds: [],
+          cpf: [],
+          stocks: [],
+          others: []
+        })
+      } else {
+        const existing = data.data().cash
+        await updateDoc(docRef, {
+          cash: [...existing, { selectedInvestment: this.selectedInvestment, amount: this.amount, purchaseDate: this.purchaseDate }],
+        });
+      }
+
+      console.log("successful");
+    }
   },
 };
 </script>

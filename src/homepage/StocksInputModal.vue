@@ -42,11 +42,22 @@
       </div>
     </div>
     <div class="nextButton">
-        <button class="whiteButton">Submit</button>
+        <button class="whiteButton" @click="submit">Submit</button>
     </div>
   </div>
 </template>
 <script>
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  setDoc,
+  getDoc,
+  doc,
+  updateDoc,
+Timestamp,
+} from "firebase/firestore";
+import app from "../firebase";
 export default {
 
   props: ["isOpened"],
@@ -64,6 +75,12 @@ export default {
   methods: {
     close() {
       this.$emit("isEmitStocks", false);
+      this.selectedCountry = "";
+      this.stockName = "";
+      this.purchasePrice = "";
+      this.purchasePrice = "";
+      this.tickerName = "";
+      this.purchaseDate = "";
     },
 
     openDropDown() {
@@ -74,6 +91,31 @@ export default {
       this.selectedCountry = countryName;
       this.dropDown = false;
     },
+
+    async submit() {
+      const userId = '19004'
+      var db = getFirestore(app);
+      const docRef = doc(db, "users", userId)
+      const data = await getDoc(docRef)
+
+      if (!data.exists()) {
+        await setDoc(docRef, {
+          id: userId, 
+          cash: [],
+          bonds: [],
+          cpf: [],
+          stocks: [ { selectedCountry: this.selectedCountry, stockName: this.stockName, purchasePrice: this.purchasePrice, purchaseDate: this.purchaseDate, tickerName: this.tickerName } ],
+          others: []
+        })
+      } else {
+        const existing = data.data().stocks
+        await updateDoc(docRef, {
+          stocks: [...existing, {selectedCountry: this.selectedCountry, stockName: this.stockName, purchasePrice: this.purchasePrice, purchaseDate: this.purchaseDate, tickerName: this.tickerName }],
+        });
+      }
+
+      console.log("successful");
+    }
   },
 };
 </script>
