@@ -6,10 +6,8 @@
   
   <div class="content">
     <Header />
-    <component :is="currentMainView"></component>
-    <component :is="currentList"></component>
-    <!-- <OverviewCharts /> -->
-    <!-- <AssetClass /> -->
+    <OverviewCharts /> 
+    <AssetClass />
   </div>
   
 </template>
@@ -37,16 +35,7 @@
       NavBar
     },
     methods:{
-      changePage(page) {
-        console.log(page);
-        if (page === 'A') {
-          this.currentMainView = OverviewCharts;
-          this.currentList = AssetClass;
-        } else {
-          this.currentMainView = StockRespository;
-          this.currentList = RespositoryList;
-        }
-      }
+      
     }
   }
 </script>
