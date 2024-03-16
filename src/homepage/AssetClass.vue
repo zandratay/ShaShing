@@ -19,12 +19,17 @@ import StocksModal from './StocksModal.vue';
 import CPFModal from './CPFModal.vue'; 
 
 export default {
+
+    
     components: {
         CashModal,
         BondsModal,
         StocksModal,
-        CPFModal
+        CPFModal,
     },
+
+    props: ['openInvestment', 'isClicked'],
+
     data() {
         return {
             modals: {
@@ -35,6 +40,7 @@ export default {
             },
         };
     },
+
     methods: {
         openModal(asset) {
             // First, set all modals to false to ensure only one can be open at a time
@@ -52,7 +58,7 @@ export default {
             } else if (asset === 'CPF') {
                 this.modals.cpf = true;
             }
-        }
+        },
     }
 }
 </script>
