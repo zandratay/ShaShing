@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Lato&display=swap");
 
 :root {
   --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -14,7 +14,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   font-size: 16px;
 }
 
@@ -22,23 +22,82 @@ h1 {
   letter-spacing: 1px;
   /* margin: 0; */
 }
-
 .graphs-container {
-  display: flex; 
-  margin-left: 5%;
-  gap: 5%; /* Adjust the space between the boxes */
-}
-
-.charts {
-  width: 25%;
-  height: 100px; 
-  background-color: white; 
   display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
+  margin-left: 5%;
+  gap: 1%; /* Adjust the space between the boxes */
+  display: flex;
+  flex-direction: row;
+}
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  margin-top: -8px;
+  gap: 30%; /* Adjust the space between the boxes */
+  display: flex;
+  flex-direction: row;
+}
+.left {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+}
+.right {
+  width: 70%;
+}
+.box {
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  background-color: white;
   box-shadow: var(--box-shadow);
 }
-
+.pie-chart {
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+  padding: 10px;
+  position: relative;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: var(--box-shadow);
+}
+.view-button{
+  background-color: white ;
+  color:666666;
+  padding:5px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border: white;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.active {
+  background-color: #164F92;
+  outline-color: transparent;
+  outline-style:solid;
+  color:white;
+  padding:5px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border: #164F92;
+  border-radius: 20px;
+} 
+.heading{
+  color:#164F92; 
+  text-align: center; 
+  font-size: 20px;
+}
+.line-chart {
+  width: 77.5%;
+  height: 100%;
+  padding: 10px;
+  padding-left: 20px;
+  position: relative;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: var(--box-shadow);
+}
 .assets-container {
   margin-left: 5%;
   margin-top: 20px;
@@ -46,9 +105,9 @@ h1 {
 
 .assets {
   width: 85%;
-  height: 60px; 
+  height: 60px;
   margin-bottom: 20px;
-  background-color: white; 
+  background-color: white;
   display: flex;
   padding-left: 20px;
   color: rgb(31, 43, 109);
@@ -56,7 +115,6 @@ h1 {
   align-items: center; /* Center content vertically */
   box-shadow: var(--box-shadow);
 }
-
 .assets:hover {
   width: 86%;
   height: 65px;
@@ -115,6 +173,7 @@ h1 {
   margin-top: 0px;
 } */
 
+
 .profile-information {
   margin: 5%;
 }
@@ -122,7 +181,7 @@ h1 {
 #duck-ui {
   height: 100%;
   width: 100%;
-  transition: transform .7s ease-in-out;
+  transition: transform 0.7s ease-in-out;
 }
 
 #duck-ui:hover {
@@ -131,7 +190,9 @@ h1 {
 }
 
 .welcome-info {
-  margin-left: 3%;
+  margin-left: 5%;
+  margin-right: 14.2%;
+  margin-top: 20px;
 }
 
 #header-img {
@@ -192,8 +253,22 @@ h1 {
   top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust for exact centering */
-  width: 60%; 
+  width: 60%;
   max-width: 600px; /* Optional: max-width for larger screens */
+  background-color: white;
+  padding: 20px;
+  border: 1px none #000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow for better visibility */
+  z-index: 1000; /* Ensure it sits above other content */
+}
+
+.modal-investment {
+  position: fixed; /* Use fixed positioning */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for exact centering */
+  width: 60%; 
+  max-width: 300px; /* Optional: max-width for larger screens */
   background-color: white; 
   padding: 20px; 
   border: 1px none #000; 
@@ -203,18 +278,168 @@ h1 {
 
 /* Style for the background overlay (optional) */
 .modal-overlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: rgba(0,0,0,0.5); /* Semi-transparent background */
-z-index: 999; /* Below the modal but above other content */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 999; /* Below the modal but above other content */
 }
 
-.modal-content h1 { 
-  color:darkblue;
+.modal-content h1 {
+  color: darkblue;
 }
-.close { 
+.close {
   float: right;
+}
+.welcome-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  
+}
+
+.investment {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.selectInvestment {
+  width:180px;
+  border-radius: 7px;
+  padding: 10px;
+  background-color: white;
+  color: gray;
+  text-align: center;
+  margin-top: 5px;
+  border: 1px solid rgba(102, 102, 102, 0.35);
+}
+
+.buttonBg {
+  
+  border: none;
+  color: gray;
+  background-color: transparent
+}
+
+.buttonBgFit {
+  border: none;
+  background-color: transparent;
+  width: 25px;
+  color: rgba(102, 102, 102, 0.90);
+}
+
+.buttonBgPlus {
+  border: none;
+  background-color: transparent;
+  width: 25px;
+  color: black;
+  margin-top: 25px;
+}
+
+.forms {
+  display: flex;
+  flex-direction: column
+}
+
+.endButton {
+  display: flex;
+  width: fit-content;
+  justify-items: end;
+  
+}
+
+.addInvestment {
+  color: #164F92;
+  font-size: large;
+  font-weight: bold;
+}
+
+.investmentType {
+  margin-top: 20px
+}
+
+.investments {
+  width:180px;
+  border-radius: 7px;
+  padding: 3px;
+  background-color: #F9F9F9;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 5px;
+  display: flex;
+  align-content: center;
+}
+
+.selectButtons {
+  width:180px;
+  border-radius: 7px;
+  padding: 5px;
+  background-color: white;
+  color: gray;
+  display: flex;
+  align-content: center;
+  margin-top: 5px;
+  border: 1px solid rgba(102, 102, 102, 0.35);
+}
+
+.selectInputs {
+  width:180px;
+  border-radius: 7px;
+  padding: 7px;
+  background-color: white;
+  color: gray;
+  margin-top: 5px;
+  border: 1px solid rgba(102, 102, 102, 0.35);
+  line-height: 0.8;
+}
+
+.whiteButton {
+  color: white;
+  background-color: transparent;
+  border: none;
+}
+
+.nextButton {
+  width: 100px;
+  padding: 5px;
+  border-radius: 15px;
+  background-color:#164F92;
+  margin-top: 40px;
+  text-align: center;
+  color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.formDiv {
+  margin-top: 20px;
+}
+
+.inputDiv {
+  margin-top: 20px;
+}
+
+.selectInvestmentAdjusted {
+  width:260px;
+  border-radius: 7px;
+  padding: 10px;
+  background-color: white;
+  color: gray;
+  margin-top: 5px;
+  border: 1px solid rgba(102, 102, 102, 0.35);
+  display: flex;
+  align-content: center;
+}
+
+.investmentsAdjusted {
+  width:260px;
+  border-radius: 7px;
+  padding: 3px;
+  background-color: #F9F9F9;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 5px;
+  display: flex;
+  align-content: center;
 }

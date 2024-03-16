@@ -1,16 +1,48 @@
 <template>
-    <img id="header-img" src="https://wallpapers.com/images/featured/widescreen-3ao0esn9qknhdudj.jpg" alt="Duck UI">
+  <img
+    id="header-img"
+    src="https://wallpapers.com/images/featured/widescreen-3ao0esn9qknhdudj.jpg"
+    alt="Duck UI"
+  />
 
-    <div class="welcome-info">
-        <h2> Welcome, Ian! </h2>
-        <!-- <h3> Current Portfolio </h3> -->
-        <p> Updated at 22 March, 5pm </p>
+  <div class="welcome-info">
+    <div class="welcome-div">
+      <div>
+        <h2>Welcome, John!</h2>
+        <h3>Current Portfolio</h3>
+        <p>Updated at 22 March, 5pm</p>
+      </div>
+      <div>
+        <button class="buttonBgPlus" v-on:click="activateInvestment">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
+            <path
+              fill="currentColor"
+              d="M12 2c-.552 0-1 .448-1 1v8H3c-.552 0-1 .448-1 1s.448 1 1 1h8v8c0 .552.448 1 1 1s1-.448 1-1v-8h8c.552 0 1-.448 1-1s-.448-1-1-1h-8V3c0-.552-.448-1-1-1z"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
-    
+  </div>
 </template>
 
-<script> </script>
+<script>
+export default {
+  data() {
+    isClicked: false;
+  },
 
-<style scoped>
-    
-</style>
+  methods: {
+    activateInvestment() {
+      this.$emit("addInvestment", true);
+    },
+  },
+};
+</script>
+
+<style scoped></style>
