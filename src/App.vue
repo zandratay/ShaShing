@@ -24,7 +24,7 @@
       Header, 
       OverviewCharts,
       AssetClass,
-      NavBar
+      NavBar,
       AddInvestment,
     },
 
