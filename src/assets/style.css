@@ -120,6 +120,60 @@ h1 {
   height: 65px;
   background-color: rgb(179, 209, 228);
 }
+
+.card-container {
+  margin-left: 5%;
+  margin-top: 20px;
+}
+
+/* card for the Stock Respository page */
+.card {
+  width: 85%;
+  height: 60px; 
+  background-color: white; 
+  display: flex;
+  padding-left: 20px;
+  color: rgb(31, 43, 109);
+  justify-content: left; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  box-shadow: var(--box-shadow);
+  margin-bottom: 20px;
+}
+
+.card.expanded {
+  margin-bottom: 0px;
+}
+
+.cardExpand {
+  width: 85%;
+  background-color: rgb(216, 215, 215); 
+  display: grid;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  color: rgb(31, 43, 109);
+  justify-content: left; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  box-shadow: var(--box-shadow);
+  margin-bottom: 10px;
+}
+
+.stock-repository-table {
+  margin: 10px;
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.stock-repository-table-head-row, .stock-repository-table-head-cell, .stock-repository-table-body-row, .stock-repository-table-body-cell {
+  border: 2px solid black;
+  
+}
+
+/* .cardExpand p:first-child {
+  margin-top: 0px;
+} */
+
+
 .profile-information {
   margin: 5%;
 }

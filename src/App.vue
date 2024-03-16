@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <NavBar />
+    <NavBar/>
   </div>
 
   <div class="content">
@@ -24,7 +24,7 @@
       Header, 
       OverviewCharts,
       AssetClass,
-      NavBar,
+      NavBar
       AddInvestment,
     },
 
