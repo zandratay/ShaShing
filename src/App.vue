@@ -1,16 +1,15 @@
 <template>
-
   <div class="navbar">
     <NavBar />
   </div>
-  
+
   <div class="content">
     <Header @addInvestment="getData" />
     <OverviewCharts />
     <AssetClass />
     <AddInvestment :isInvestment="addInvestment" @clicked="setData"/>
-    </div>
-  
+  </div>
+
 </template>
 
 <script>
@@ -26,7 +25,7 @@
       OverviewCharts,
       AssetClass,
       NavBar,
-      AddInvestment
+      AddInvestment,
     },
 
     data() {
@@ -44,14 +43,8 @@
       setData(data) {
         this.addInvestment = data
       }
-
-
     
     }
-
-
-
   }
+}
 </script>
-
-
