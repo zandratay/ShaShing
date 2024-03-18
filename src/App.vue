@@ -10,6 +10,10 @@
     <AddInvestment :isInvestment="addInvestment" @clicked="setData"/>
   </div>
 
+  <!-- <div>
+    <Login />
+  </div> -->
+
 </template>
 
 <script>
@@ -18,6 +22,7 @@
   import AssetClass from  './homepage/AssetClass.vue';
   import NavBar from  './homepage/NavBar.vue';
   import AddInvestment from './homepage/AddInvestment.vue'
+  import Login from './views/Login.vue'
 
   export default {
     components: {
@@ -26,6 +31,7 @@
       AssetClass,
       NavBar,
       AddInvestment,
+      Login
     },
 
     data() {

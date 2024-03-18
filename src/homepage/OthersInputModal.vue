@@ -1,4 +1,6 @@
 <template>
+    <div class="modal-overlay" :class="{ 'active': isOpened }" @click="closeModal"></div>
+
     <div class="modal" v-if="isOpened">
         <div class="investment">
       <text class="addInvestment">Others</text>
@@ -22,12 +24,17 @@
           <label>Asset Name</label>
           <input v-model="assetName" placeholder="Enter asset name" class="selectInputs"/>
           <label class="inputDiv">Purchase Price</label>
-          <input v-model="purchasePrice" placeholder="Enter purchase price" class="selectInputs"/>
+          <input 
+            type="number"
+            step="0.01"
+            v-model="purchasePrice" 
+            placeholder="Enter purchase price" 
+            class="selectInputs"/>
         </div>
         <div class="forms">
           <div class="forms">
             <label>Purchase Date</label>
-            <input v-model="purchaseDate" placeholder="Enter purchase date" class="selectInputs"/>
+            <input type="date" v-model="purchaseDate" placeholder="Enter purchase date" class="selectInputs"/>
           </div>
           <div class="forms">
             <label class="inputDiv">Description</label>
@@ -37,7 +44,7 @@
       </div>
       <div>
         <div class="nextButton">
-        <button class="whiteButton">Submit</button>
+        <button class="whiteButton" @click="close">Submit</button>
         </div>
 
       </div>

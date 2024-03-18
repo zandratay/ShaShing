@@ -14,9 +14,18 @@
 
         <nav class="left-nav">
             <ul>
-                <li> Overview </li>
-                <li> Stocks</li>
-                <li> Social Media </li>
+                <li> 
+                    <img class="navbaricon" src="https://cdn-icons-png.flaticon.com/512/25/25794.png" alt="home icon">
+                    <span> Home </span>
+                </li>
+                <li> 
+                    <img class="navbaricon" src="https://www.pngkit.com/png/detail/961-9617712_report-report-icon-vector-png.png" alt="reports icon">
+                    <span> News </span>
+                </li>
+                <li> 
+                    <img class="navbaricon" src="https://cdn-icons-png.flaticon.com/512/25/25441.png" alt="bell icon">
+                    <span> Reports </span>
+                </li>
             </ul>
         </nav>
     </div>
