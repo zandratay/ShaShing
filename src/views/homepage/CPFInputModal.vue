@@ -1,4 +1,6 @@
 <template>
+  <div class="modal-overlay" :class="{ 'active': isOpened }" @click="closeModal"></div>
+  
   <div class="modal" v-if="isOpened">
     <div class="investment">
       <text class="addInvestment">CPF</text>
@@ -66,6 +68,8 @@
           <label>Amount</label>
           
               <input
+              type="number"
+              step="0.01"
               v-model="amount"
               placeholder="Enter amount"
               class="selectInputs"
