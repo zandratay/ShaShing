@@ -48,7 +48,7 @@ h1 {
 .box {
   width: 100%;
   height: 100px;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: white;
   box-shadow: var(--box-shadow);
 }
@@ -58,7 +58,7 @@ h1 {
   margin-top: 10px;
   padding: 10px;
   position: relative;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: white;
   box-shadow: var(--box-shadow);
 }
@@ -94,7 +94,7 @@ h1 {
   padding: 10px;
   padding-left: 20px;
   position: relative;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: white;
   box-shadow: var(--box-shadow);
 }
@@ -114,6 +114,7 @@ h1 {
   justify-content: left; /* Center content horizontally */
   align-items: center; /* Center content vertically */
   box-shadow: var(--box-shadow);
+  border-radius: 5px;
 }
 .assets:hover {
   width: 86%;
@@ -178,6 +179,13 @@ h1 {
   margin: 5%;
 }
 
+.navbaricon {
+  height: 15px;
+  width: 15px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
 #duck-ui {
   height: 100%;
   width: 100%;
@@ -222,6 +230,7 @@ h1 {
 .left-nav ul {
   list-style-type: none;
   margin-top: 20px;
+  font-family: "Lato", sans-serif;
 }
 
 .left-nav ul li {
@@ -230,11 +239,11 @@ h1 {
   text-decoration: none;
   font-size: 15px;
   color: black;
-  display: block;
 }
 
 .left-nav ul li:hover {
-  background-color: rgb(179, 209, 228);
+  background-color: rgb(22, 79, 146);
+  color: white;
 }
 
 /* Initial state of the content, matching the collapsed navbar width */
@@ -274,6 +283,7 @@ h1 {
   border: 1px none #000; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow for better visibility */
   z-index: 1000; /* Ensure it sits above other content */
+  border-radius: 5px;
 }
 
 /* Style for the background overlay (optional) */
@@ -283,13 +293,20 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent background */
   z-index: 999; /* Below the modal but above other content */
+  backdrop-filter: blur(5px); /* blur effect */
+  display: none; /* Hide by default */
+}
+
+.modal-overlay.active {
+  display: block; /* Show the overlay when active */
 }
 
 .modal-content h1 {
   color: darkblue;
 }
+
 .close {
   float: right;
 }
@@ -318,7 +335,6 @@ h1 {
 }
 
 .buttonBg {
-  
   border: none;
   color: gray;
   background-color: transparent
@@ -404,7 +420,7 @@ h1 {
 .nextButton {
   width: 100px;
   padding: 5px;
-  border-radius: 15px;
+  border-radius: 5px;
   background-color:#164F92;
   margin-top: 40px;
   text-align: center;
