@@ -1,14 +1,16 @@
 <template>
+    <div class="modal-overlay" :class="{ 'active': isVisible }" @click="closeModal"></div>
+    
     <div class="modal" v-if="isVisible">
       <div class="modal-content">
         <span class="close" @click="close">&times;</span>
-        <h1> Stocks </h1>
+        <h1> Cash</h1>
         <div> 
-            <p> USA </p>
-            <p> NASDAQ Composite </p>
+            <p> POSB </p>
+            <p> Savings account 123 </p>
 
-            <p> Singapore </p>
-            <p> Keppel </p>
+            <p> DBS </p>
+            <p> Savings account 234 </p>
         </div>
       </div>
     </div>

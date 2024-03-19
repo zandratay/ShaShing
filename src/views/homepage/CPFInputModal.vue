@@ -1,7 +1,9 @@
 <template>
+  <div class="modal-overlay" :class="{ 'active': isOpened }" @click="closeModal"></div>
+  
   <div class="modal" v-if="isOpened">
     <div class="investment">
-      <text class="addInvestment">Cash</text>
+      <text class="addInvestment">CPF</text>
       <button @click="close" class="buttonBgFit">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -19,42 +21,61 @@
     <div class="formDiv">
       <div class="investment">
         <div class="forms">
-          <label>Bank Name</label>
+          <label>CPF Account</label>
           <div class="selectButtons">
             <button @click="openDropDown" class="buttonBg">
-              {{ selectedInvestment ? selectedInvestment : "Select Bank Name" }}
+              <text>{{
+                selectAccount ? selectAccount : "Select CPF Account"
+              }}</text>
             </button>
           </div>
           <div v-if="dropDown">
             <div class="investments">
-              <button class="buttonBg" @click="selectInvestment('POSB')">
-                POSB
+              <button
+                @click="selectedAccount('Ordinary Account')"
+                class="buttonBg"
+              >
+                Ordinary Account
               </button>
             </div>
             <div class="investments">
-              <button class="buttonBg" @click="selectInvestment('OCBC')">
-                OCBC
+              <button
+                @click="selectedAccount('MediSave Account')"
+                class="buttonBg"
+              >
+                MediSave Account
+              </button>
+            </div>
+            <div class="investments">
+              <button
+                @click="selectedAccount('Retirement Account')"
+                class="buttonBg"
+              >
+                Retirement Account
+              </button>
+            </div>
+            <div class="investments">
+              <button
+                @click="selectedAccount('Special Account')"
+                class="buttonBg"
+              >
+                Special Account
               </button>
             </div>
           </div>
         </div>
         <div class="forms">
-          <div class="forms">
-            <label>Amount</label>
-            <input
+          <label>Amount</label>
+          
+              <input
+              type="number"
+              step="0.01"
               v-model="amount"
               placeholder="Enter amount"
               class="selectInputs"
             />
-          </div>
-          <div class="forms">
-            <label class="inputDiv">Purchase date</label>
-            <input
-              v-model="purchaseDate"
-              placeholder="Enter purchase date"
-              class="selectInputs"
-            />
-          </div>
+          
+          
         </div>
       </div>
       <div class="nextButton">
@@ -64,34 +85,28 @@
   </div>
 </template>
 <script>
-import { X } from "lucide-react";
 export default {
   props: ["isOpened"],
-
-  components: {
-    X,
-  },
 
   data() {
     return {
       dropDown: false,
-      selectedInvestment: "",
+      selectAccount: "",
       amount: "",
-      purchaseDate: "",
     };
   },
 
   methods: {
     close() {
-      this.$emit("isEmitCash", false);
+      this.$emit("isEmitCPF", false);
     },
 
     openDropDown() {
       this.dropDown = !this.dropDown;
     },
 
-    selectInvestment(investmentType) {
-      this.selectedInvestment = investmentType;
+    selectedAccount(accountType) {
+      this.selectAccount = accountType;
       this.dropDown = false;
     },
   },
