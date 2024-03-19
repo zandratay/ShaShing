@@ -91,11 +91,13 @@ export default {
 </script>
 
 <style>
+
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  margin: -10px; /* To adjust for the padding on the cards */
+  justify-content: space-around;
+  margin: 10px;
+  
 }
 
 .card {
@@ -107,6 +109,11 @@ export default {
   overflow: hidden; /* Ensures the image does not flow outside the card's boundary */
   border-radius: 10px; /* Rounded corners for the card */
   transition: transform 0.3s ease-in-out; /* Smooth transform effect */
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  /* Ensure that the card content pushes down the footer */
+  justify-content: space-between; 
 }
 
 .card:hover {
@@ -115,7 +122,7 @@ export default {
 
 .card-image-container {
   width: 100%;
-  height: 200px; /* Fixed height for images */
+  height: 250px; /* Fixed height for images */
   overflow: hidden; /* Hide the overflow to maintain aspect ratio */
 }
 
@@ -127,6 +134,7 @@ export default {
 
 .card-content {
   padding: 15px; /* Padding inside the card */
+
 }
 
 .card-title {
@@ -137,27 +145,31 @@ export default {
 .card-meta {
   font-size: 14px;
   color: #666;
+   
 }
 
-a:link {
-    color: blue;
-    text-decoration: none;
+.card-link {
+  display: block; /* Make the link a block-level element */
+  width: calc(100% + 20px); /* Ensure it takes up the full width of its parent */
+  height: 100%; /* Ensure it takes up the full height, if you want it to be the entire card's size */
+  text-decoration: none; /* Optional: Removes the underline from the link */
+  margin-left: -20px;
+  color: blue;
 }
 
-a:visited {
-    color: blue;
-    text-decoration: none;
+
+
+/* Responsive adjustments for different screen sizes, if necessary */
+@media (max-width: 1024px) {
+  .card {
+    flex: 0 0 calc(50% - 20px); /* 2 cards per row on medium-sized screens */
+  }
 }
 
-a:hover {
-    color: blue;
-    text-decoration: none;
+@media (max-width: 768px) {
+  .card {
+    flex: 0 0 calc(100% - 20px); /* 1 card per row on small screens */
+  }
 }
-
-a:active {
-    color: blue;
-    text-decoration: none;
-}
-
 /* Responsive adjustments as provided, with any additional tweaks required */
 </style>
