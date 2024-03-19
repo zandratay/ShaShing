@@ -208,6 +208,8 @@ h1 {
   height: 145px;
 }
 
+/* NavBar.vue related */
+
 .navbar {
   width: 60px; /* Default, collapsed width */
   height: 100vh;
@@ -219,6 +221,7 @@ h1 {
   overflow-x: hidden; /* Ensure content does not cause horizontal scrollbar */
   padding-top: 20px;
   padding-left: 10px;
+  padding-right: 5px;
   display: inline-block;
   transition: width 0.5s; /* Smooth transition for expanding and collapsing */
 }
@@ -252,10 +255,30 @@ h1 {
   transition: margin-left 0.5s; /* Smooth transition for the margin change */
 }
 
+.signOutBtn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  /* width: 45px; */
+  margin: 5px;  
+  padding: 5px;
+  text-align: middle;
+  border: none;
+  background-color: lightblue;
+  color: black;
+}
+
+.signOutBtn:hover{
+  background-color: #164F92;
+  color: white;
+}
+
 /* When the navbar is hovered over, adjust content margin to match the expanded navbar */
 .navbar:hover + .content {
   margin-left: 15%; /* Adjusted margin to match the expanded navbar width */
 }
+
+/* Modal related */
 
 .modal {
   position: fixed; /* Use fixed positioning */

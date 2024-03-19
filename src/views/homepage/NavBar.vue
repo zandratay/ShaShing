@@ -11,8 +11,8 @@
                 <li><router-link to="/"> Overview </router-link></li>
                 <li><router-link to="/"> Financial Reports </router-link></li>
                 <li><router-link to="/" >Financial News</router-link></li>
-                <li><button @click="handleSignOut" v-if="isLoggedIn"> Sign out</button></li>
             </ul>
+            <button class="signOutBtn" @click="handleSignOut" v-if="isLoggedIn"> Sign out</button>
             <router-view />
         </nav>
     
