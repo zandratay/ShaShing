@@ -4,8 +4,8 @@
     </div>
   
     <div class="content">
-      <StockRespository @input-change="handleInputChange"/>
-      <RespositoryList :searchQuery="searchQuery"/>
+      <StockRespository @input-change="handleInputChange" :notificationData="notificationData"/>
+      <RespositoryList @notification-output="notifcationToDisplay" :searchQuery="searchQuery"/>
     </div>
   
   </template>
@@ -26,17 +26,22 @@
   
       data() {
         return {
-            searchQuery: ''
+            searchQuery: '',
+            notificationData: []
         }
       },
   
       methods: {
         handleInputChange(value) {
-        // Update the searchQuery data property
-        console.log('handleInputChange received:', value); // For debugging
-        this.searchQuery = value;
-        // You might also call a method to fetch new data based on the updated searchQuery here
-      }
+            // Update the searchQuery data property
+            console.log('handleInputChange received:', value); // For debugging
+            this.searchQuery = value;
+        },
+        notifcationToDisplay(value) {
+            // Update the notificationData data property
+            console.log('notification received:', value); // For debugging
+            this.notificationData = value;
+        }
       }
     }
   </script>

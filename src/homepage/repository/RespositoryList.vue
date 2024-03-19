@@ -72,12 +72,13 @@ export default {
         }
     },
     methods: {
-        async stockFillingsToCardList(stockTicker) {
+        async stockFillingsToCardList(stockTicker, reportType) {
             try {
-                const res = await axios.get(`https://finnhub.io/api/v1/stock/filings?symbol=${stockTicker}&form=10-Q&token=${this.apiKey}`)
+                const res = await axios.get(`https://finnhub.io/api/v1/stock/filings?symbol=${stockTicker}&form=${reportType}&token=${this.apiKey}`);
                 const returnData = res.data.map((item) => {
                     return {
-                        'date':item.acceptedDate,
+                        // Because initial acceptedDate contains the hh:mm::ss and we want to remove it, we split the string
+                        'date':item.acceptedDate.split(' ')[0],
                         'reportType':item.form,
                         'URL':item.reportUrl
                     }
@@ -168,17 +169,48 @@ export default {
     },
     async mounted() {
         this.stockList = this.initialStockList;
-        const filingsPromises =  this.stockList.map(stock => this.stockFillingsToCardList(stock));
+        const filingsPromises =  this.stockList.map(stock => this.stockFillingsToCardList(stock, "10-Q"));
         const filingsResults = await Promise.all(filingsPromises);
+
+        const filingsPromises2 =  this.stockList.map(stock => this.stockFillingsToCardList(stock, "10-K"));
+        const filingsResults2 = await Promise.all(filingsPromises2);
 
         this.cardsParameters = this.stockList.map((stock, index) => ({
             stock: stock,
             isExpanded: false,
             pageAt: 1,
-            data: filingsResults[index]
+            data: filingsResults[index].concat(filingsResults2[index]).sort((a, b) => new Date(b.date) - new Date(a.date))
         }));
 
-        // console.log(this.cardsParameters);
+        // To send the top three latest reports to the Notification page 
+        const toNotify = this.cardsParameters.map((item, index) => ({
+            stock: item.stock,
+            report: item.data.slice(0,3).map(item => item.reportType),
+            date: item.data.slice(0,3).map(item => item.date)
+        }));
+
+        // console.log(toNotify);
+
+        // Flatten the list to a single array of { date, stock } objects
+        const flattenedList = toNotify.flatMap(stock =>
+            stock.date?.map((date, index) => ({
+                date,
+                report: stock.report[index],
+                stock: stock.stock
+            }))
+        );
+
+        // console.log(flattenedList);
+
+        // Sort by date in descending order
+        const sortedByDate = flattenedList.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        // Select the top three latest dates
+        const topThree = sortedByDate.slice(0, 3);
+
+        console.log(topThree);
+
+        this.$emit('notification-output', topThree);
 
     }
 }
