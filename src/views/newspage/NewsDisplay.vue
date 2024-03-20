@@ -3,7 +3,7 @@
         <div v-for="(item, index) in newsItems" :key="index" class="card">
             <a :href="item.url" class="card-link">
                 <div class="card-image-container">
-                    <img :src="item.urlToImage" alt="news_image" class="card-img">
+                    <img :src="item.urlToImage" @error = "imageError" alt="news_image" class="card-img">
                 </div>
                 <div class="card-content">
                     <h2 class="card-title">{{ item.title }}</h2>
@@ -83,7 +83,14 @@ export default {
                                 });
 
             this.newsItems = allarticles.filter((item) => item.source.name != "Yahoo Entertainment");
-        }
+        },
+
+        imageError(event) {
+          console.log("Dead image alert!");
+          event.target.src = '/dead_image.png';
+      }
+
+
     }
 }
 
