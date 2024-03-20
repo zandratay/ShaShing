@@ -75,6 +75,7 @@ export default {
   methods: {
     close() {
       this.$emit("isEmitStocks", false);
+      this.$emit("stocksSubmitted", true);
       this.selectedCountry = "";
       this.stockName = "";
       this.purchasePrice = "";
@@ -93,7 +94,7 @@ export default {
     },
 
     async submit() {
-      const userId = '19004'
+      const userId = '177889'
       var db = getFirestore(app);
       const docRef = doc(db, "users", userId)
       const data = await getDoc(docRef)

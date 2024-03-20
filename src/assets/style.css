@@ -105,7 +105,35 @@ h1 {
 
 .assets {
   width: 85%;
-  height: 60px;
+  height: fit-content;
+  margin-bottom: 20px;
+  background-color: white;
+  display: flex;
+  padding-left: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #164F92;
+  justify-content: left; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  box-shadow: var(--box-shadow);
+}
+
+.investmentContainer {
+  width: 300px;
+  display: flex;
+  margin-top: 15px;
+  justify-content: space-between;
+}
+
+.investmentContainer span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.points {
+  width: 65%;
+  height: 150px;
   margin-bottom: 20px;
   background-color: white;
   display: flex;
@@ -115,10 +143,17 @@ h1 {
   align-items: center; /* Center content vertically */
   box-shadow: var(--box-shadow);
 }
+
 .assets:hover {
-  width: 86%;
-  height: 65px;
+  
+  height: fit-content;
   background-color: rgb(179, 209, 228);
+}
+
+.investmentTitle {
+  font-size:larger;
+  font-weight: bold;
+
 }
 
 .card-container {

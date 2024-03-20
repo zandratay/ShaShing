@@ -105,6 +105,7 @@ export default {
   methods: {
     close() {
       this.$emit("isEmitCPF", false);
+      this.$emit("cpfSubmitted", true);
       this.selectAccount = "";
       this.amount = "";
     },
@@ -119,7 +120,7 @@ export default {
     },
 
     async submit() {
-      const userId = '20045'
+      const userId = '177889'
       var db = getFirestore(app);
       const docRef = doc(db, "users", userId)
       const data = await getDoc(docRef)

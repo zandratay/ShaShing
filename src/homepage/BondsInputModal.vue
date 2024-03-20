@@ -75,7 +75,8 @@ export default {
   methods: {
     close() {
       this.$emit("isEmitBonds", false);
-      this.selectedCountry = "";
+      this.$emit("bondsSubmitted", true);
+      this.selectedCountry = ""; 
       this.bondName = "";
       this.purchasePrice = "";
       this.purchaseDate = "";

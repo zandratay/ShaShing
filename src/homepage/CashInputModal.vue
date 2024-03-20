@@ -94,6 +94,7 @@ export default {
   methods: {
     close() {
       this.$emit("isEmitCash", false);
+      this.$emit("cashSubmitted", true);
       this.selectedInvestment = "";
       this.amount = "";
       this.purchaseDate = "";
