@@ -4,8 +4,8 @@
     </div>
   
     <div class="content">
-      <StockRespository @input-change="handleInputChange" :notificationData="notificationData"/>
-      <RespositoryList @notification-output="notifcationToDisplay" :searchQuery="searchQuery"/>
+      <StockRespository @input-change="handleInputChange" :notificationData="notificationData" :noSavedStocks="noSavedStocks"/>
+      <RespositoryList @notification-output="notifcationToDisplay" @noSavedStocks="noSavedStocksChange" :searchQuery="searchQuery"/>
     </div>
   
   </template>
@@ -27,7 +27,8 @@
       data() {
         return {
             searchQuery: '',
-            notificationData: []
+            notificationData: [],
+            noSavedStocks: false
         }
       },
   
@@ -41,6 +42,9 @@
             // Update the notificationData data property
             console.log('notification received:', value); // For debugging
             this.notificationData = value;
+        },
+        noSavedStocksChange(value) {
+            this.noSavedStocks = value;
         }
       }
     }
