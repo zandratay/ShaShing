@@ -8,7 +8,7 @@
   <div class="welcome-info">
     <div class="welcome-div">
       <div>
-        <h2>Welcome, John!</h2>
+        <h2>Welcome, {{ user.displayName }}!</h2>
         <h3>Current Portfolio</h3>
         <p>Updated at 22 March, 5pm</p>
       </div>
@@ -32,11 +32,12 @@
 </template>
 
 <script>
+
 export default {
+  props: ['user'],
   data() {
     isClicked: false;
   },
-
   methods: {
     activateInvestment() {
       this.$emit("addInvestment", true);
@@ -44,5 +45,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

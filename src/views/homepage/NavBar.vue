@@ -13,6 +13,7 @@
                 <li><router-link to="/newspage" >Financial News</router-link></li>
                 <li><button @click="handleSignOut" v-if="isLoggedIn"> Sign out</button></li>
             </ul>
+            <button class="signOutBtn" @click="handleSignOut" v-if="isLoggedIn"> Sign out</button>
             <router-view />
         </nav>
     
