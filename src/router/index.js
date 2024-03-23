@@ -3,27 +3,23 @@ import firebaseApp from '@/firebase.js';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      component: () => import("../views/homepage/Index.vue"),
-      meta: {
+    history: createWebHistory(),
+    routes: [
+      { path: '/', 
+        component: () => import("../views/homepage/Index.vue"),
+        meta:{
+          requiresAuth: true,
+        }, 
+        name: 'home' },
+      { path: '/login', component: () => import("../views/Login.vue"), name: 'login' },
+      { path: '/register', component: () => import("../views/Register.vue"), name: 'register' },
+      { path: '/newspage', component: () => import("../views/newspage/NewsPage.vue"),
+       meta: {
         requiresAuth: true,
-      },
-      name: 'home'
-    },
-    { path: '/login', component: () => import("../views/Login.vue"), name: 'login' },
-    { path: '/register', component: () => import("../views/Register.vue"), name: 'register' },
-    {
-      path: '/newspage', 
-      component: () => import("../views/newspage/NewsPage.vue"), 
-      meta: {
-        requiresAuth: true,
-      },
-      name: 'newspage',
-    }
-  ],
+      }, 
+      name: 'newspage'},
+      { path: '/repository', component: () => import("../views/repository/RepositoryPage.vue"), name: 'repository'}
+    ],
 });
 
 const getCurrentUser = () => {

@@ -12,9 +12,9 @@
 </template>
 
 <script>
-  import Header from  './newspage/Header.vue';
-  import NavBar from  './homepage/NavBar.vue';
-  import NewsDisplay from './newspage/NewsDisplay.vue';
+  import Header from  './Header.vue';
+  import NavBar from  '../homepage/NavBar.vue';
+  import NewsDisplay from './NewsDisplay.vue';
 
   export default {
     components: {

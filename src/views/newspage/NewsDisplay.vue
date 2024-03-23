@@ -1,9 +1,12 @@
 <template>
     <div class="card-container">
-        <div v-for="(item, index) in newsItems" :key="index" class="card">
+      <div v-if="isLoading" class="loading-overlay">
+        <img src='/loading_page.gif' alt="Loading..." />
+      </div>
+        <div v-for="(item, index) in newsItems" :key="index" class="card" @click = "handleCardClick(item.url)">
             <a :href="item.url" class="card-link">
                 <div class="card-image-container">
-                    <img :src="item.urlToImage" alt="news_image" class="card-img">
+                    <img :src="item.urlToImage || '/dead_image.png'" @error = "imageError" alt="news_image" class="card-img">
                 </div>
                 <div class="card-content">
                     <h2 class="card-title">{{ item.title }}</h2>
@@ -21,7 +24,8 @@ export default {
 
     data() {
         return {
-            newsItems: []
+            newsItems: [],
+            isLoading: false, // Add a loading state
         };
     },
 
@@ -50,28 +54,22 @@ export default {
 
     methods: {
 
-        getDate() {
+        handleCardClick(articleUrl) {
+          this.isLoading = true; // Set loading state to true
 
-            const today = new Date();
-
-            if (today.getMonth() == 0) {
-
-                const year = today.getFullYear() - 1;
-
-                return year + "-" + 12 + "-" + today.getDate();
-
-            }
-            return today.getFullYear() + "-" + (today.getMonth()) + "-" + today.getDate();
+          setTimeout(() => {
+            window.location.href = articleUrl; // Navigate to the article URL
+            this.isLoading = false; // Reset loading state (optional, since we're navigating away)
+          }, 2000);
         },
 
         async getArticles(query) {
 
-            const date = this.getDate();
-
             var url = 'https://newsapi.org/v2/everything?' +
                 'q=' + query + '&' +
-                'from=' + date + '&' + 
-                'sortBy=popularity&' +
+                'sortBy=publishedAt&' +
+                'language=en&' +
+                'excludeDomains=yahoo.com&'+
                 'apiKey=088092c2cff740e3b9dc4597a812f7d5';
 
             var req = new Request(url);
@@ -82,8 +80,15 @@ export default {
                                     return data.articles
                                 });
 
-            this.newsItems = allarticles.filter((item) => item.source.name != "Yahoo Entertainment");
+            this.newsItems = allarticles.filter((item) => item.source.name != "[Removed]");
+        },
+
+        imageError(event) {
+          console.log("Image failed to load!");
+          event.target.src = '/dead_image.png';
         }
+
+
     }
 }
 
@@ -91,11 +96,13 @@ export default {
 </script>
 
 <style>
+
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  margin: -10px; /* To adjust for the padding on the cards */
+  justify-content: space-around;
+  margin: 10px;
+  
 }
 
 .card {
@@ -107,6 +114,11 @@ export default {
   overflow: hidden; /* Ensures the image does not flow outside the card's boundary */
   border-radius: 10px; /* Rounded corners for the card */
   transition: transform 0.3s ease-in-out; /* Smooth transform effect */
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  /* Ensure that the card content pushes down the footer */
+  justify-content: space-between; 
 }
 
 .card:hover {
@@ -115,7 +127,7 @@ export default {
 
 .card-image-container {
   width: 100%;
-  height: 200px; /* Fixed height for images */
+  height: 250px; /* Fixed height for images */
   overflow: hidden; /* Hide the overflow to maintain aspect ratio */
 }
 
@@ -127,6 +139,7 @@ export default {
 
 .card-content {
   padding: 15px; /* Padding inside the card */
+
 }
 
 .card-title {
@@ -137,27 +150,49 @@ export default {
 .card-meta {
   font-size: 14px;
   color: #666;
+   
 }
 
-a:link {
-    color: blue;
-    text-decoration: none;
+.card-link {
+  display: block; /* Make the link a block-level element */
+  width: calc(100% + 20px); /* Ensure it takes up the full width of its parent */
+  height: 100%; /* Ensure it takes up the full height, if you want it to be the entire card's size */
+  text-decoration: none; /* Optional: Removes the underline from the link */
+  margin-left: -20px;
+  color: blue;
 }
 
-a:visited {
-    color: blue;
-    text-decoration: none;
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 1000; /* Ensure it's on top of other content */
 }
 
-a:hover {
-    color: blue;
-    text-decoration: none;
+.loading-overlay img {
+  max-width: 320px;
+  max-height: 180px;
 }
 
-a:active {
-    color: blue;
-    text-decoration: none;
+
+
+/* Responsive adjustments for different screen sizes, if necessary */
+@media (max-width: 1024px) {
+  .card {
+    flex: 0 0 calc(50% - 20px); /* 2 cards per row on medium-sized screens */
+  }
 }
 
+@media (max-width: 768px) {
+  .card {
+    flex: 0 0 calc(100% - 20px); /* 1 card per row on small screens */
+  }
+}
 /* Responsive adjustments as provided, with any additional tweaks required */
 </style>
