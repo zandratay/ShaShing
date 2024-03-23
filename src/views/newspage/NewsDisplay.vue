@@ -1,6 +1,9 @@
 <template>
     <div class="card-container">
-        <div v-for="(item, index) in newsItems" :key="index" class="card">
+      <div v-if="isLoading" class="loading-overlay">
+        <img src='/loading_page.gif' alt="Loading..." />
+      </div>
+        <div v-for="(item, index) in newsItems" :key="index" class="card" @click = "handleCardClick(item.url)">
             <a :href="item.url" class="card-link">
                 <div class="card-image-container">
                     <img :src="item.urlToImage" @error = "imageError" alt="news_image" class="card-img">
@@ -21,7 +24,8 @@ export default {
 
     data() {
         return {
-            newsItems: []
+            newsItems: [],
+            isLoading: false, // Add a loading state
         };
     },
 
@@ -49,6 +53,15 @@ export default {
     },
 
     methods: {
+
+        handleCardClick(articleUrl) {
+          this.isLoading = true; // Set loading state to true
+
+          setTimeout(() => {
+            window.location.href = articleUrl; // Navigate to the article URL
+            this.isLoading = false; // Reset loading state (optional, since we're navigating away)
+          }, 2000);
+        },
 
         getDate() {
 
@@ -82,7 +95,8 @@ export default {
                                     return data.articles
                                 });
 
-            this.newsItems = allarticles.filter((item) => item.source.name != "Yahoo Entertainment");
+            this.newsItems = allarticles.filter((item) => item.source.name != "Yahoo Entertainment")
+                              .filter((item) => item.title !=  "[Removed]");
         },
 
         imageError(event) {
@@ -162,6 +176,24 @@ export default {
   text-decoration: none; /* Optional: Removes the underline from the link */
   margin-left: -20px;
   color: blue;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 1000; /* Ensure it's on top of other content */
+}
+
+.loading-overlay img {
+  max-width: 320px;
+  max-height: 180px;
 }
 
 
