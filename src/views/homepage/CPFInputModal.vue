@@ -79,12 +79,22 @@
         </div>
       </div>
       <div class="nextButton">
-        <button class="whiteButton">Submit</button>
+        <button class="whiteButton" @click="submit">Submit</button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  setDoc,
+  getDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import app from "../firebase";
 export default {
   props: ["isOpened"],
 
@@ -99,6 +109,8 @@ export default {
   methods: {
     close() {
       this.$emit("isEmitCPF", false);
+      this.selectAccount = "";
+      this.amount = "";
     },
 
     openDropDown() {
@@ -109,6 +121,31 @@ export default {
       this.selectAccount = accountType;
       this.dropDown = false;
     },
+
+    async submit() {
+      const userId = '20045'
+      var db = getFirestore(app);
+      const docRef = doc(db, "users", userId)
+      const data = await getDoc(docRef)
+
+      if (!data.exists()) {
+        await setDoc(docRef, {
+          id: userId, 
+          cash: [],
+          bonds: [],
+          cpf: [ { selectAccount: this.selectAccount, amount: this.amount } ],
+          stocks: [],
+          others: []
+        })
+      } else {
+        const existing = data.data().cpf
+        await updateDoc(docRef, {
+          cpf: [...existing, { selectAccount: this.selectAccount, amount: this.amount }],
+        });
+      }
+
+      console.log("successful");
+    }
   },
 };
 </script>
