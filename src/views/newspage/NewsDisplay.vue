@@ -6,7 +6,7 @@
         <div v-for="(item, index) in newsItems" :key="index" class="card" @click = "handleCardClick(item.url)">
             <a :href="item.url" class="card-link">
                 <div class="card-image-container">
-                    <img :src="item.urlToImage" @error = "imageError" alt="news_image" class="card-img">
+                    <img :src="item.urlToImage || '/dead_image.png'" @error = "imageError" alt="news_image" class="card-img">
                 </div>
                 <div class="card-content">
                     <h2 class="card-title">{{ item.title }}</h2>
@@ -63,28 +63,13 @@ export default {
           }, 2000);
         },
 
-        getDate() {
-
-            const today = new Date();
-
-            if (today.getMonth() == 0) {
-
-                const year = today.getFullYear() - 1;
-
-                return year + "-" + 12 + "-" + today.getDate();
-
-            }
-            return today.getFullYear() + "-" + (today.getMonth()) + "-" + today.getDate();
-        },
-
         async getArticles(query) {
-
-            const date = this.getDate();
 
             var url = 'https://newsapi.org/v2/everything?' +
                 'q=' + query + '&' +
-                'from=' + date + '&' + 
-                'sortBy=popularity&' +
+                'sortBy=publishedAt&' +
+                'language=en&' +
+                'excludeDomains=yahoo.com&'+
                 'apiKey=088092c2cff740e3b9dc4597a812f7d5';
 
             var req = new Request(url);
@@ -95,14 +80,13 @@ export default {
                                     return data.articles
                                 });
 
-            this.newsItems = allarticles.filter((item) => item.source.name != "Yahoo Entertainment")
-                              .filter((item) => item.title !=  "[Removed]");
+            this.newsItems = allarticles.filter((item) => item.source.name != "[Removed]");
         },
 
         imageError(event) {
-          console.log("Dead image alert!");
+          console.log("Image failed to load!");
           event.target.src = '/dead_image.png';
-      }
+        }
 
 
     }
