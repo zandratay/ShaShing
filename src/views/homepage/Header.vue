@@ -8,8 +8,8 @@
   <div class="welcome-info">
     <div class="welcome-div">
       <div>
-        <h2>Welcome, John!</h2>
-        <h3>Current Portfolio</h3>
+        <h2>Welcome, John!</h2> <hr>
+        <!-- <h3>Current Portfolio</h3> -->
         <p>Updated at 22 March, 5pm</p>
       </div>
       <div>

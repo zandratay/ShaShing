@@ -70,6 +70,7 @@
       </div>
       
     </div>
+
     <CashInputModal v-model:isOpened="isCash" @isEmitCash="setDataCash" />
     <CPFInputModal v-model:isOpened="isCPF" @isEmitCPF="setDataCPF" />
     <BondsInputModal v-model:isOpened="isBonds" @isEmitBonds="setDataBonds" />
