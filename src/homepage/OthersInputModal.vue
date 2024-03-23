@@ -25,10 +25,10 @@
             placeholder="Enter asset name"
             class="selectInputs"
           />
-          <label class="inputDiv">Purchase Price</label>
+          <label class="inputDiv">Current Price</label>
           <input
             v-model="purchasePrice"
-            placeholder="Enter purchase price"
+            placeholder="Enter current price"
             class="selectInputs"
           />
         </div>
@@ -103,14 +103,14 @@ export default {
           bonds: [],
           cpf: [],
           stocks: [],
-          others: [ {assetName: this.assetName, purchasePrice: this.purchasePrice, purchaseDate: this.purchaseDate, description: this.description} ],
+          others: [ {assetName: this.assetName, amount: this.purchasePrice, purchaseDate: this.purchaseDate, description: this.description} ],
         });
       } else {
         const existing = data.data().others;
         await updateDoc(docRef, {
           others: [
             ...existing,
-            { assetName: this.assetName, purchasePrice: this.purchasePrice, purchaseDate: this.purchaseDate, description: this.description},
+            { assetName: this.assetName, amount: this.purchasePrice, purchaseDate: this.purchaseDate, description: this.description},
           ],
         });
       }

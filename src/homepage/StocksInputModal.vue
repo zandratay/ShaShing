@@ -11,8 +11,8 @@
         <div class="forms">
           <label>Stock Name</label>
           <input v-model="stockName" placeholder="Enter stocker name" class="selectInputs"/>
-          <label class="inputDiv">Purchase Price</label>
-          <input v-model="purchasePrice" placeholder="Enter purchase price" class="selectInputs"/>
+          <label class="inputDiv">Current Price</label>
+          <input v-model="purchasePrice" placeholder="Enter current price" class="selectInputs"/>
             <label class="inputDiv">Country name</label>
             <div class="selectButtons">
             <button @click="openDropDown" class="buttonBg">
@@ -38,6 +38,7 @@
             <label class="inputDiv">Purchase date</label>
             <input v-model="purchaseDate" placeholder="Enter purchase date" class="selectInputs"/>
           </div>
+         
         </div>
       </div>
     </div>
@@ -69,7 +70,8 @@ export default {
         stockName: "",
         purchasePrice: "",
         tickerName: "",
-        purchaseDate: ""
+        purchaseDate: "",
+       
     }
   },
   methods: {
@@ -82,6 +84,7 @@ export default {
       this.purchasePrice = "";
       this.tickerName = "";
       this.purchaseDate = "";
+      
     },
 
     openDropDown() {
@@ -105,13 +108,13 @@ export default {
           cash: [],
           bonds: [],
           cpf: [],
-          stocks: [ { selectedCountry: this.selectedCountry, stockName: this.stockName, purchasePrice: this.purchasePrice, purchaseDate: this.purchaseDate, tickerName: this.tickerName } ],
+          stocks: [ { selectedCountry: this.selectedCountry, stockName: this.stockName, purchaseDate: this.purchaseDate, tickerName: this.tickerName, amount: this.purchasePrice } ],
           others: []
         })
       } else {
         const existing = data.data().stocks
         await updateDoc(docRef, {
-          stocks: [...existing, {selectedCountry: this.selectedCountry, stockName: this.stockName, purchasePrice: this.purchasePrice, purchaseDate: this.purchaseDate, tickerName: this.tickerName }],
+          stocks: [...existing, {selectedCountry: this.selectedCountry, stockName: this.stockName, purchaseDate: this.purchaseDate, tickerName: this.tickerName, amount: this.purchasePrice }],
         });
       }
 

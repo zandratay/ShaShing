@@ -40,10 +40,10 @@
         </div>
         <div class="forms">
           <div class="forms">
-            <label>Amount</label>
+            <label>Current price</label>
             <input
               v-model="amount"
-              placeholder="Enter amount"
+              placeholder="Enter current price"
               class="selectInputs"
             />
           </div>

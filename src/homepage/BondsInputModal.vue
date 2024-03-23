@@ -11,8 +11,8 @@
         <div class="forms">
           <label>Bond Name</label>
           <input v-model="bondName" placeholder="Enter bond name" class="selectInputs"/>
-          <label class="inputDiv">Purchase Price</label>
-          <input v-model="purchasePrice" placeholder="Enter purchase price" class="selectInputs" />
+          <label class="inputDiv">Current Price</label>
+          <input v-model="purchasePrice" placeholder="Enter current price" class="selectInputs" />
             <label class="inputDiv">Country name</label>
             <div class="selectButtons">
               <button @click="openDropDown" class="buttonBg">
@@ -102,7 +102,7 @@ export default {
         await setDoc(docRef, {
           id: userId, 
           cash: [],
-          bonds: [{ bondName: this.bondName, purchasePrice: this.purchasePrice, selectedCountry: this.selectedCountry, identificationNo: this.identificationNo, purchaseDate: this.purchaseDate}],
+          bonds: [{ bondName: this.bondName, amount: this.purchasePrice, selectedCountry: this.selectedCountry, identificationNo: this.identificationNo, purchaseDate: this.purchaseDate}],
           cpf: [],
           stocks: [],
           others: []
@@ -110,7 +110,7 @@ export default {
       } else {
         const existing = data.data().bonds
         await updateDoc(docRef, {
-          bonds: [...existing, { bondName: this.bondName, purchasePrice: this.purchasePrice, selectedCountry: this.selectedCountry, identificationNo: this.identificationNo, purchaseDate: this.purchaseDate }],
+          bonds: [...existing, { bondName: this.bondName, amount: this.purchasePrice, selectedCountry: this.selectedCountry, identificationNo: this.identificationNo, purchaseDate: this.purchaseDate }],
         });
       }
 
