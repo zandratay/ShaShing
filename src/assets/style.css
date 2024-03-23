@@ -62,10 +62,10 @@ h1 {
   background-color: white;
   box-shadow: var(--box-shadow);
 }
-.view-button{
-  background-color: white ;
-  color:666666;
-  padding:5px;
+.view-button {
+  background-color: white;
+  color: 666666;
+  padding: 5px;
   padding-left: 12px;
   padding-right: 12px;
   border: white;
@@ -73,19 +73,19 @@ h1 {
   cursor: pointer;
 }
 .active {
-  background-color: #164F92;
+  background-color: #164f92;
   outline-color: transparent;
-  outline-style:solid;
-  color:white;
-  padding:5px;
+  outline-style: solid;
+  color: white;
+  padding: 5px;
   padding-left: 12px;
   padding-right: 12px;
-  border: #164F92;
+  border: #164f92;
   border-radius: 20px;
-} 
-.heading{
-  color:#164F92; 
-  text-align: center; 
+}
+.heading {
+  color: #164f92;
+  text-align: center;
   font-size: 20px;
 }
 .line-chart {
@@ -130,8 +130,8 @@ h1 {
 /* card for the Stock Respository page */
 .card {
   width: 85%;
-  height: 60px; 
-  background-color: white; 
+  height: 60px;
+  background-color: white;
   display: flex;
   padding-left: 20px;
   color: rgb(31, 43, 109);
@@ -147,7 +147,7 @@ h1 {
 
 .cardExpand {
   width: 85%;
-  background-color: rgb(216, 215, 215); 
+  background-color: rgb(216, 215, 215);
   display: grid;
   padding-left: 20px;
   padding-bottom: 10px;
@@ -165,15 +165,16 @@ h1 {
   text-align: center;
 }
 
-.stock-repository-table-head-row, .stock-repository-table-head-cell, .stock-repository-table-body-row, .stock-repository-table-body-cell {
+.stock-repository-table-head-row,
+.stock-repository-table-head-cell,
+.stock-repository-table-body-row,
+.stock-repository-table-body-cell {
   border: 2px solid black;
-  
 }
 
 /* .cardExpand p:first-child {
   margin-top: 0px;
 } */
-
 
 .profile-information {
   margin: 5%;
@@ -300,11 +301,11 @@ h1 {
   top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust for exact centering */
-  width: 60%; 
+  width: 60%;
   max-width: 300px; /* Optional: max-width for larger screens */
-  background-color: white; 
-  padding: 20px; 
-  border: 1px none #000; 
+  background-color: white;
+  padding: 20px;
+  border: 1px none #000;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow for better visibility */
   z-index: 1000; /* Ensure it sits above other content */
   border-radius: 5px;
@@ -349,7 +350,7 @@ h1 {
 }
 
 .selectInvestment {
-  width:180px;
+  width: 180px;
   border-radius: 7px;
   padding: 10px;
   background-color: white;
@@ -362,14 +363,14 @@ h1 {
 .buttonBg {
   border: none;
   color: gray;
-  background-color: transparent
+  background-color: transparent;
 }
 
 .buttonBgFit {
   border: none;
   background-color: transparent;
   width: 25px;
-  color: rgba(102, 102, 102, 0.90);
+  color: rgba(102, 102, 102, 0.9);
 }
 
 .buttonBgFit:hover {
@@ -390,31 +391,30 @@ h1 {
 
 .forms {
   display: flex;
-  flex-direction: column
+  flex-direction: column;
 }
 
 .endButton {
   display: flex;
   width: fit-content;
   justify-items: end;
-  
 }
 
 .addInvestment {
-  color: #164F92;
+  color: #164f92;
   font-size: large;
   font-weight: bold;
 }
 
 .investmentType {
-  margin-top: 20px
+  margin-top: 20px;
 }
 
 .investments {
-  width:180px;
+  width: 180px;
   border-radius: 7px;
   padding: 3px;
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   color: rgba(0, 0, 0, 0.45);
   margin-top: 5px;
   display: flex;
@@ -427,7 +427,7 @@ h1 {
 }
 
 .selectButtons {
-  width:180px;
+  width: 180px;
   border-radius: 7px;
   padding: 5px;
   background-color: white;
@@ -439,7 +439,7 @@ h1 {
 }
 
 .selectInputs {
-  width:180px;
+  width: 180px;
   border-radius: 7px;
   padding: 7px;
   background-color: white;
@@ -459,7 +459,7 @@ h1 {
   width: 100px;
   padding: 5px;
   border-radius: 5px;
-  background-color:#164F92;
+  background-color: #164f92;
   margin-top: 40px;
   text-align: center;
   color: white;
@@ -480,7 +480,7 @@ h1 {
 }
 
 .selectInvestmentAdjusted {
-  width:260px;
+  width: 260px;
   border-radius: 7px;
   padding: 10px;
   background-color: white;
@@ -496,16 +496,100 @@ h1 {
 }
 
 .investmentsAdjusted {
-  width:260px;
+  width: 260px;
   border-radius: 7px;
   padding: 3px;
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   color: rgba(0, 0, 0, 0.45);
   margin-top: 5px;
   display: flex;
   align-content: center;
 }
 
+.landingPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers items horizontally in the container */
+  justify-content: center; /* Centers items vertically in the container */
+  height: 100vh; /* Full height of the viewport */
+  text-align: center; /* Centers the text inside the div */
+}
+
+.continueWithBtn {
+  background-color: white;
+  border-radius: 5px;
+  border: solid 1px rgb(207, 205, 205);
+  margin-top:-10px;
+  padding: 10px;
+  font-size: 15px;
+  width: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+}
+.existingUserBtn {
+  margin-top:-10px;
+  font-size: 15px;
+  cursor: pointer;
+  border: None;
+  background-color: #f7f7f7;
+}
+
+#existingtext {
+  margin-top:-10px;
+
+}
+
+.continueWithBtn:hover {
+  background-color: #ebf2f8;
+}
+
+.continueWithBtn:active {
+  transform: scale(0.95);
+}
+
+#nextBtn {
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+  width: 350px;
+  margin: 15px;
+}
+
+.inputBox {
+  width: 350px;
+  border-radius: 5px;
+  border: solid 1px rgb(169, 168, 168);
+  padding: 10px;
+  margin: 5px;
+}
+#signup{
+  margin-bottom:20px;
+}
+
+#existing{
+  margin-bottom:10px;
+}
+.text-container{
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+}
+.divider-container {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.or {
+  padding: 18px; /* Adjust the padding as needed */
+  color: grey; /* Adjust the color as needed */
+  font-weight: bold; /* Optional */
+}
 .investmentsAdjusted:hover {
   transform: scale(1.05);
   background-color: rgb(154, 190, 231);

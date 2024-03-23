@@ -4,7 +4,7 @@
   </div>
 
   <div class="content">
-    <Header @addInvestment="getData" />
+    <Header @addInvestment="getData" :user="user"/>
     <OverviewCharts />
     <AssetClass />
     <AddInvestment :isInvestment="addInvestment" @clicked="setData"/>
@@ -19,6 +19,10 @@
   import NavBar from  './NavBar.vue';
   import AddInvestment from './AddInvestment.vue'
 
+  import firebaseApp from '@/firebase';
+  import { getAuth } from 'firebase/auth';
+  const auth = getAuth();
+
   export default {
     components: {
       Header, 
@@ -31,7 +35,8 @@
     data() {
       return {
         addInvestment: false,
-        clicked: false
+        clicked: false,
+        user: auth.currentUser
       }
     },
 
