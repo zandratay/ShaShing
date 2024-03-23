@@ -1,5 +1,5 @@
 <template>
-    <div class="welcome-info">
+    <div v-if="!noSavedStocks" class="welcome-info">
         <div class="charts">
             <h4> Latest Released financial reports! </h4>
             <!-- <p v-for="cell in notificationData" class="notification-item"> 
@@ -12,9 +12,9 @@
             </div>
         </div>
     </div>
-    <div class="welcome-info">
+    <div v-if="!noSavedStocks" class="welcome-info">
         <div class="charts">
-            <h4> To add notification and search bar </h4>
+            <h4> Search bar: </h4>
             <input id = "header-input"type="text" placeholder = "Search Keyword..." @input="emitInputValue">
         </div>
 
@@ -24,7 +24,8 @@
 <script>
 export default {
     props: {
-        notificationData: Array 
+        notificationData: Array,
+        noSavedStocks: Boolean
     },
     methods: {
         emitInputValue(event) {
