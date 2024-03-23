@@ -94,7 +94,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import app from "../firebase";
+import app from "../../firebase";
 export default {
   props: ["isOpened"],
 
