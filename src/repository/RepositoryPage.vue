@@ -11,8 +11,8 @@
   </template>
   
   <script>
-    import Header from  '../Header.vue';
-    import NavBar from  '../NavBar.vue';
+    import Header from  '../views/homepage/Header.vue';
+    import NavBar from  '../views/homepage/NavBar.vue';
     import RespositoryList from './RespositoryList.vue'
     import StockRespository from './StockRespository.vue'
   
