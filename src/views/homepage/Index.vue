@@ -4,51 +4,73 @@
   </div>
 
   <div class="content">
-    <Header @addInvestment="getData" :user="user"/>
+    <Header @addInvestment="getData" />
     <OverviewCharts />
-    <AssetClass />
-    <AddInvestment :isInvestment="addInvestment" @clicked="setData"/>
+    <AssetClass :isUpdateCash="cashUpdated" :isUpdateStock="stocksUpdated" :isUpdateBonds="bondsUpdated" :isUpdateCPF="cpfUpdated
+    "/>
+    <AddInvestment
+      :isInvestment="addInvestment"
+      @clicked="setData"
+      @updateAssets="handleUpdateAssetClassCash"
+      @updateStocks="handleUpdateAssetClassStocks"
+      @updateBonds="handleUpdateAssetClassBonds"
+      @updateCPF="handleUpdateAssetClassCPF"
+    />
   </div>
 
 </template>
 
 <script>
-  import Header from  './Header.vue';
-  import OverviewCharts from  './OverviewCharts.vue';
-  import AssetClass from  './AssetClass.vue';
-  import NavBar from  './NavBar.vue';
-  import AddInvestment from './AddInvestment.vue'
+import Header from "./Header.vue";
+import OverviewCharts from "./OverviewCharts.vue";
+import AssetClass from "./AssetClass.vue";
+import NavBar from "./NavBar.vue";
+import AddInvestment from "./AddInvestment.vue";
 
-  import firebaseApp from '@/firebase';
-  import { getAuth } from 'firebase/auth';
-  const auth = getAuth();
+export default {
+  components: {
+    Header,
+    OverviewCharts,
+    AssetClass,
+    NavBar,
+    AddInvestment,
+  },
 
-  export default {
-    components: {
-      Header, 
-      OverviewCharts,
-      AssetClass,
-      NavBar,
-      AddInvestment,
+  data() {
+    return {
+      addInvestment: false,
+      clicked: false,
+      cashUpdated: false,
+      stocksUpdated: false,
+      bondsUpdated: false,
+      cpfUpdated: false,
+    };
+  },
+
+  methods: {
+    getData(data) {
+      this.addInvestment = data;
     },
 
-    data() {
-      return {
-        addInvestment: false,
-        clicked: false,
-        user: auth.currentUser
-      }
+    setData(data) {
+      this.addInvestment = data;
     },
 
-    methods: {
-      getData(data) {
-        this.addInvestment = data
-      },
+    handleUpdateAssetClassCash(data) {
+      this.cashUpdated = data;
+    },
 
-      setData(data) {
-        this.addInvestment = data
-      }
-    
-    }
-  }
+    handleUpdateAssetClassStocks(data) {
+      this.stocksUpdated = data;
+    },
+
+    handleUpdateAssetClassBonds(data) {
+      this.bondsUpdated = data;
+    },
+
+    handleUpdateAssetClassCPF(data) {
+      this.cpfUpdated = data;
+    },
+  },
+};
 </script>

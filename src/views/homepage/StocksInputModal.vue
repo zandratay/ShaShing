@@ -12,13 +12,8 @@
         <div class="forms">
           <label>Stock Name</label>
           <input v-model="stockName" placeholder="Enter stocker name" class="selectInputs"/>
-          <label class="inputDiv">Purchase Price</label>
-          <input 
-            type="number"
-            step="0.01"
-            v-model="purchasePrice" 
-            placeholder="Enter purchase price" 
-            class="selectInputs"/>
+          <label class="inputDiv">Current Price</label>
+          <input v-model="purchasePrice" placeholder="Enter current price" class="selectInputs"/>
             <label class="inputDiv">Country name</label>
             <div class="selectButtons">
             <button @click="openDropDown" class="buttonBg">
@@ -42,17 +37,29 @@
           </div>
           <div class="forms">
             <label class="inputDiv">Purchase date</label>
-            <input type="date" v-model="purchaseDate" placeholder="Enter purchase date" class="selectInputs"/>
+            <input v-model="purchaseDate" placeholder="Enter purchase date" class="selectInputs"/>
           </div>
+         
         </div>
       </div>
     </div>
     <div class="nextButton">
-        <button class="whiteButton" @click="close">Submit</button>
+        <button class="whiteButton" @click="submit">Submit</button>
     </div>
   </div>
 </template>
 <script>
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  setDoc,
+  getDoc,
+  doc,
+  updateDoc,
+Timestamp,
+} from "firebase/firestore";
+import app from "../../firebase";
 export default {
 
   props: ["isOpened"],
@@ -64,12 +71,21 @@ export default {
         stockName: "",
         purchasePrice: "",
         tickerName: "",
-        purchaseDate: ""
+        purchaseDate: "",
+       
     }
   },
   methods: {
     close() {
       this.$emit("isEmitStocks", false);
+      this.$emit("stocksSubmitted", true);
+      this.selectedCountry = "";
+      this.stockName = "";
+      this.purchasePrice = "";
+      this.purchasePrice = "";
+      this.tickerName = "";
+      this.purchaseDate = "";
+      
     },
 
     openDropDown() {
@@ -80,6 +96,31 @@ export default {
       this.selectedCountry = countryName;
       this.dropDown = false;
     },
+
+    async submit() {
+      const userId = '177889'
+      var db = getFirestore(app);
+      const docRef = doc(db, "users", userId)
+      const data = await getDoc(docRef)
+
+      if (!data.exists()) {
+        await setDoc(docRef, {
+          id: userId, 
+          cash: [],
+          bonds: [],
+          cpf: [],
+          stocks: [ { selectedCountry: this.selectedCountry, stockName: this.stockName, purchaseDate: this.purchaseDate, tickerName: this.tickerName, amount: this.purchasePrice } ],
+          others: []
+        })
+      } else {
+        const existing = data.data().stocks
+        await updateDoc(docRef, {
+          stocks: [...existing, {selectedCountry: this.selectedCountry, stockName: this.stockName, purchaseDate: this.purchaseDate, tickerName: this.tickerName, amount: this.purchasePrice }],
+        });
+      }
+
+      console.log("successful");
+    }
   },
 };
 </script>

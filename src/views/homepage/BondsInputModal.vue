@@ -13,13 +13,8 @@
         <div class="forms">
           <label>Bond Name</label>
           <input v-model="bondName" placeholder="Enter bond name" class="selectInputs"/>
-          <label class="inputDiv">Purchase Price</label>
-          <input 
-            type="number"
-            step="0.01"
-            v-model="purchasePrice" 
-            placeholder="Enter purchase price" 
-            class="selectInputs" />
+          <label class="inputDiv">Current Price</label>
+          <input v-model="purchasePrice" placeholder="Enter current price" class="selectInputs" />
             <label class="inputDiv">Country name</label>
             <div class="selectButtons">
               <button @click="openDropDown" class="buttonBg">
@@ -43,18 +38,29 @@
           </div>
           <div class="forms">
             <label class="inputDiv">Purchase date</label>
-            <input type="date" v-model="purchaseDate" placeholder="Enter purchase date" class="selectInputs"/>
+            <input v-model="purchaseDate" placeholder="Enter purchase date" class="selectInputs"/>
           </div>
         </div>
       </div>
       <div class="nextButton">
-        <button class="whiteButton" @click="close">Submit</button>
+        <button class="whiteButton" @click="submit">Submit</button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  setDoc,
+  getDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import app from "../../firebase";
 export default {
+  
   props: ["isOpened"],
 
   data() {
@@ -71,6 +77,12 @@ export default {
   methods: {
     close() {
       this.$emit("isEmitBonds", false);
+      this.$emit("bondsSubmitted", true);
+      this.selectedCountry = ""; 
+      this.bondName = "";
+      this.purchasePrice = "";
+      this.purchaseDate = "";
+      this.identificationNo = "";
     },
 
     openDropDown() {
@@ -81,6 +93,31 @@ export default {
       this.selectedCountry = countryName;
       this.dropDown = false;
     },
+
+    async submit() {
+      const userId = '177889'
+      var db = getFirestore(app);
+      const docRef = doc(db, "users", userId)
+      const data = await getDoc(docRef)
+
+      if (!data.exists()) {
+        await setDoc(docRef, {
+          id: userId, 
+          cash: [],
+          bonds: [{ bondName: this.bondName, amount: this.purchasePrice, selectedCountry: this.selectedCountry, identificationNo: this.identificationNo, purchaseDate: this.purchaseDate}],
+          cpf: [],
+          stocks: [],
+          others: []
+        })
+      } else {
+        const existing = data.data().bonds
+        await updateDoc(docRef, {
+          bonds: [...existing, { bondName: this.bondName, amount: this.purchasePrice, selectedCountry: this.selectedCountry, identificationNo: this.identificationNo, purchaseDate: this.purchaseDate }],
+        });
+      }
+
+      console.log("successful");
+    }
   },
 };
 </script>
