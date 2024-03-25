@@ -14,8 +14,9 @@
           <label>Bond Name</label>
           <input v-model="bondName" placeholder="Enter bond name" class="selectInputs"/>
           <label class="inputDiv">Current Price</label>
-          <input v-model="purchasePrice" placeholder="Enter current price" class="selectInputs" />
-            <label class="inputDiv">Country name</label>
+          <input type="number" v-model="purchasePrice" placeholder="Enter current price" class="selectInputs" />
+            <label 
+              class="inputDiv">Country name</label>
             <div class="selectButtons">
               <button @click="openDropDown" class="buttonBg">
             {{ selectedCountry ? selectedCountry : "Select Country" }}
@@ -38,7 +39,11 @@
           </div>
           <div class="forms">
             <label class="inputDiv">Purchase date</label>
-            <input v-model="purchaseDate" placeholder="Enter purchase date" class="selectInputs"/>
+            <input 
+              v-model="purchaseDate" 
+              type="date"
+              placeholder="Enter purchase date" 
+              class="selectInputs"/>
           </div>
         </div>
       </div>

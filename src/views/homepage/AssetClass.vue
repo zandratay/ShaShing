@@ -3,51 +3,51 @@
       <div class="assets" @click="openModal('Cash')">
         <div>
           <strong> <text class="investmentTitle">Cash</text> </strong>
-          <div v-for="(item, index) in cashes" :key="index" class="pointDiv">
+          <!-- <div v-for="(item, index) in cashes" :key="index" class="pointDiv">
             <div class="investmentContainer">
               <span>{{ item.amount }}</span>
               <span>{{ item.purchaseDate }}</span>
               <span>{{ item.selectedInvestment }}</span>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
   
       <div class="assets" @click="openModal('Stocks')">
         <div>
           <strong> <text class="investmentTitle">Stocks</text> </strong>
-          <div v-for="(item, index) in stocks" :key="index" class="pointDiv">
+          <!-- <div v-for="(item, index) in stocks" :key="index" class="pointDiv">
             <div class="investmentContainer">
              
               <span>{{ item.tickerName }}</span>
               <span>{{ item.selectedCountry }}</span>
               <span>{{ item.amount }}</span>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="assets" @click="openModal('Bonds')">
           <div>
           <strong> <text class="investmentTitle">Bonds</text> </strong>
-          <div v-for="(item, index) in bonds" :key="index" class="pointDiv">
+          <!-- <div v-for="(item, index) in bonds" :key="index" class="pointDiv">
             <div class="investmentContainer">
               
               <span>{{ item.bondName }}</span>
               <span>{{ item.selectedCountry }}</span>
               <span>{{ item.amount }}</span>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="assets" @click="openModal('CPF')"><div>
           <strong> <text class="investmentTitle">CPF</text> </strong>
-          <div v-for="(item, index) in cpf" :key="index" class="pointDiv">
+          <!-- <div v-for="(item, index) in cpf" :key="index" class="pointDiv">
             <div class="investmentContainer">
               
               <span>{{ item.amount }}</span>
               <span>{{ item.selectAccount }}</span>
             </div>
-          </div>
+          </div> -->
         </div></div>
       <CashModal v-model:isVisible="modals.cash" />
       <StocksModal v-model:isVisible="modals.stocks" />

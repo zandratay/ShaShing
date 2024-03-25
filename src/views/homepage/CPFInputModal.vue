@@ -69,6 +69,7 @@
           
               <input
               v-model="amount"
+              type="number"
               placeholder="Enter current price"
               class="selectInputs"
             />
