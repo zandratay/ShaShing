@@ -1,21 +1,25 @@
 <template>
-    <div v-if="!noSavedStocks" class="welcome-info">
-        <div class="charts">
-            <h4> Latest Released financial reports! </h4>
+    <div v-if="!noSavedStocks">
+        <div class="latest-release">
+            <h4 
+            style="font-size: 30px; font-weight: 600; color: black; letter-spacing: 1px; background-color: rgba(255, 255, 255, 0.5); width: 50%; padding: 10px;">
+                Latest Financial Reports
+            </h4>
             <!-- <p v-for="cell in notificationData" class="notification-item"> 
                 {{formatDate(cell.date)}}: {{cell.stock}} released their {{cell.report}} 
-            </p> -->
+            </p> --> 
             <div v-for="cell in notificationData" :key="cell.date" class="notification-item">
-                <span class="date">{{ formatDate(cell.date) }}</span>
+                <span class="date" style="font-weight:bold;">{{ formatDate(cell.date) }}</span>
                 <span class="colon">:</span>
                 <span class="content">{{ cell.stock }} released their {{ cell.report }}</span>
             </div>
         </div>
     </div>
-    <div v-if="!noSavedStocks" class="welcome-info">
-        <div class="charts">
-            <h4> Search bar: </h4>
-            <input id = "header-input"type="text" placeholder = "Search Keyword..." @input="emitInputValue">
+    <div v-if="!noSavedStocks">
+        <div class="repo-search-bar">
+            <!-- <h4> Search bar </h4> -->
+            <input id = "search-bar" type="text" placeholder = "Search Keywords" @input="emitInputValue">
+            <img src="https://static-00.iconduck.com/assets.00/search-icon-2048x2048-4r9dtbbw.png" alt="Search icon" style="height:10px; width:10px; margin-left: 7px;">
         </div>
 
     </div>
@@ -63,6 +67,24 @@ export default {
 
 
 <style>
+.latest-release {
+    background-image: url('https://mergersandinquisitions.com/wp-content/uploads/2019/06/cat-investment-banking-banner.jpg');
+    margin-left: 50px; /* Initial margin to match the collapsed navbar width */
+    padding: 15px;
+    padding-top: 1px;
+    /* padding-bottom: 25px; */
+}
+
+#search-bar {
+    margin-left: 60px; /* Initial margin to match the collapsed navbar width */
+    padding: 8px;
+    margin-top: 15px;
+    border-radius: 20px;
+    border: solid black 1px;
+    background-color: white;
+    width: fit-content;
+}
+
 .charts {
   /* background-color: #fff;*/
   background-color: #fff;
@@ -78,9 +100,9 @@ export default {
 .notification-item {
   display: flex;
   align-items: center;
-  margin-bottom: 5px; /* Adjust spacing between items */
-  /* justify-content: flex-start; */
-  /* text-align: justify; */
+  padding: 13px;
+  background-color: rgba(255, 255, 255, 0.5);
+  width: 50%;
 }
 
 .date {

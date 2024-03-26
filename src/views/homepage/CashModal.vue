@@ -3,8 +3,7 @@
     
     <div class="modal" v-if="isVisible">
       <span class="close" @click="close">&times;</span>
-      <h1> Cash</h1>
-
+      <h1> Cash </h1>
       <div class="modal-content">
         <div class="headerContainer">
           <span>Amount</span>
