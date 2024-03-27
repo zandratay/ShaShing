@@ -177,7 +177,7 @@ h1 {
 
 /* card for the Stock Respository page */
 .card {
-  width: 85%;
+  width: 95%;
   height: 60px;
   background-color: white;
   display: flex;
@@ -194,7 +194,7 @@ h1 {
 }
 
 .cardExpand {
-  width: 85%;
+  width: 95%;
   background-color: rgb(221, 238, 251);
   display: grid;
   padding-left: 20px;

@@ -2,7 +2,9 @@
     <div v-if="!noSavedStocks">
         <div class="latest-release">
             <h4 
-            style="font-size: 30px; font-weight: 600; color: black; letter-spacing: 1px; background-color: rgba(255, 255, 255, 0.5); width: 50%; padding: 10px;">
+            style="font-size: 30px; font-weight: 600; color: black; letter-spacing: 1px; 
+            background-color: rgba(255, 255, 255, 0.3);
+            width: 50%; padding: 10px;">
                 Latest Financial Reports
             </h4>
             <!-- <p v-for="cell in notificationData" class="notification-item"> 
@@ -68,12 +70,33 @@ export default {
 
 <style>
 .latest-release {
-    background-image: url('https://mergersandinquisitions.com/wp-content/uploads/2019/06/cat-investment-banking-banner.jpg');
-    margin-left: 50px; /* Initial margin to match the collapsed navbar width */
-    padding: 15px;
+    position: relative; /* Needed to position the pseudo-element */
+    /* background-image: url('https://mergersandinquisitions.com/wp-content/uploads/2019/06/cat-investment-banking-banner.jpg'); */
+    background-color: rgb(221, 238, 251);
+    margin-left: 60px; /* Initial margin to match the collapsed navbar width */
+    padding: 10px;
     padding-top: 1px;
-    /* padding-bottom: 25px; */
+    height: fit-content;
+    margin-top: 10px;
+    width: 90%;
 }
+
+/* .latest-release::before {
+    content: ""; 
+    position: absolute; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.4); 
+    z-index: 1; 
+}
+
+.latest-release * {
+    position: relative;
+    z-index: 2;
+} */
+
 
 #search-bar {
     margin-left: 60px; /* Initial margin to match the collapsed navbar width */
@@ -101,7 +124,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 13px;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.3);
   width: 50%;
 }
 
