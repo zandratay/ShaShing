@@ -2,7 +2,7 @@
     <div class="nav-container">
 
         <div class="profile-information">
-            <img id="duck-ui" src="/logo." alt="Duck UI">
+            <img id="duck-ui" src="/logo.jpg" alt="Duck UI">
             <strong> Duck UI </strong>
         </div>
 
