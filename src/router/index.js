@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import firebaseApp from '@/firebase.js';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import store from '../store';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -36,6 +37,8 @@ const getCurrentUser = () => {
 };
 
 router.beforeEach(async (to, from, next) => {
+
+  store.commit('setLoading', true); 
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (await getCurrentUser()) {
       next();
@@ -45,5 +48,9 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next();
   };
+});
+
+router.afterEach(() => {
+  setTimeout(() => store.commit('setLoading', false), 500); // Simulate loading, remove setTimeout in a real app
 });
 export default router;
