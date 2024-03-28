@@ -15,7 +15,7 @@
     <div v-if="!noSavedStocks" class="welcome-info">
         <div class="charts">
             <h4> Search bar: </h4>
-            <input id = "header-input"type="text" placeholder = "Search Keyword..." @input="emitInputValue">
+            <input id = "header-input" type="text" placeholder = "Search Keyword..." @input="emitInputValue">
         </div>
 
     </div>

@@ -1,6 +1,10 @@
 <template>
-  <div class="modal-overlay" :class="{ 'active': isOpened }" @click="closeModal"></div>
-  
+  <div
+    class="modal-overlay"
+    :class="{ active: isOpened }"
+    @click="closeModal"
+  ></div>
+
   <div class="modal" v-if="isOpened">
     <div class="investment">
       <text class="addInvestment">CPF</text>
@@ -66,14 +70,12 @@
         </div>
         <div class="forms">
           <label>Current price</label>
-          
-              <input
-              v-model="amount"
-              placeholder="Enter current price"
-              class="selectInputs"
-            />
-          
-          
+
+          <input
+            v-model="amount"
+            placeholder="Enter current price"
+            class="selectInputs"
+          />
         </div>
       </div>
       <div class="nextButton">
@@ -93,6 +95,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import app from "../../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 export default {
   props: ["isOpened"],
 
@@ -101,7 +105,14 @@ export default {
       dropDown: false,
       selectAccount: "",
       amount: "",
+      user: null,
     };
+  },
+
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      this.user = user;
+    });
   },
 
   methods: {
@@ -122,29 +133,34 @@ export default {
     },
 
     async submit() {
-      const userId = '177889'
-      var db = getFirestore(app);
-      const docRef = doc(db, "users", userId)
-      const data = await getDoc(docRef)
+      if (this.user) {
+        const userId = this.user.uid;
+        var db = getFirestore(app);
+        const docRef = doc(db, "users", userId);
+        const data = await getDoc(docRef);
 
-      if (!data.exists()) {
-        await setDoc(docRef, {
-          id: userId, 
-          cash: [],
-          bonds: [],
-          cpf: [ { selectAccount: this.selectAccount, amount: this.amount } ],
-          stocks: [],
-          others: []
-        })
-      } else {
-        const existing = data.data().cpf
-        await updateDoc(docRef, {
-          cpf: [...existing, { selectAccount: this.selectAccount, amount: this.amount }],
-        });
+        if (!data.exists()) {
+          await setDoc(docRef, {
+            id: userId,
+            cash: [],
+            bonds: [],
+            cpf: [{ selectAccount: this.selectAccount, amount: this.amount }],
+            stocks: [],
+            others: [],
+          });
+        } else {
+          const existing = data.data().cpf;
+          await updateDoc(docRef, {
+            cpf: [
+              ...existing,
+              { selectAccount: this.selectAccount, amount: this.amount },
+            ],
+          });
+        }
+
+        console.log("successful");
       }
-
-      console.log("successful");
-    }
+    },
   },
 };
 </script>
