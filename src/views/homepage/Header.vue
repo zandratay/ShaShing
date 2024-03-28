@@ -8,7 +8,7 @@
   <div class="welcome-info">
     <div class="welcome-div">
       <div>
-        <h2>Welcome, Evan!</h2>
+        <h2>Welcome, {{ userName }}!</h2>
         <h3>Current Portfolio</h3>
         <p>Updated at 22 March, 5pm</p>
       </div>
@@ -32,12 +32,31 @@
 </template>
 
 <script>
-
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 export default {
   props: ['user'],
   data() {
-    isClicked: false;
+    return {
+      isClicked: false,
+      userName: null,
+    }
+    
   },
+
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, let's get their name from the Google account
+        this.userName = user.displayName.split(' ')[0]; // 'displayName' includes the full name
+        console.log("User Name:", this.userName); // Example usage
+      } else {
+        // No user is signed in.
+        console.log("No user is signed in.");
+      }
+    });
+  },
+
   methods: {
     activateInvestment() {
       this.$emit("addInvestment", true);
