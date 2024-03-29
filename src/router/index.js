@@ -22,7 +22,8 @@ const router = createRouter({
         requiresAuth: true,
       },
       name: 'newspage',
-    }
+    },
+    { path: '/repository', component: () => import("../views/repository/RepositoryPage.vue"), name: 'repository'}
   ],
 });
 
