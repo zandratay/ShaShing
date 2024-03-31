@@ -26,7 +26,9 @@
   <script>
   import { getFirestore, getDoc, doc } from "firebase/firestore";
   import app from "../../firebase";
-  
+  import { getAuth, onAuthStateChanged } from "firebase/auth";
+  const auth = getAuth();
+
   export default {
     props: [
       'isVisible',
@@ -53,6 +55,19 @@
       }
     },
 
+    created() {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.user = user;
+          // Now that we have a user, fetch their data
+          this.fetchCash();
+        } else {
+          // Handle user not logged in
+          this.user = null;
+        }
+      });
+    },
+
     mounted() {
       this.fetchCash();
     },
@@ -60,15 +75,18 @@
       close() {
         this.$emit('update:isVisible', false);
       },
+      
       async fetchCash() {
-        const userId = "177889";
-        var db = getFirestore(app);
-        const docRef = doc(db, "users", userId);
-        const data = await getDoc(docRef);
-        if (data.exists()) {
-          this.cashes = data.data().cash;
+        if (this.user) {
+          const userId = this.user.uid;
+          var db = getFirestore(app);
+          const docRef = doc(db, "users", userId);
+          const data = await getDoc(docRef);
+          if (data.exists()) {
+            this.cashes = data.data().cash;
+          }
         }
-      }
+      },
     }
   }
   </script>
