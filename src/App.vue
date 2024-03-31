@@ -11,6 +11,7 @@
 import LoadingPage from './views/LoadingPage.vue'
 
 export default {
+  name: 'App',
   components: {
     LoadingPage
   }

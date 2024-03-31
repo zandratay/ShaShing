@@ -9,7 +9,7 @@
 }
 
 body {
-  background-image: url('https://www.publicdomainpictures.net/pictures/230000/nahled/light-blue-background.jpg');
+  background-image: url("https://www.publicdomainpictures.net/pictures/230000/nahled/light-blue-background.jpg");
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -322,7 +322,7 @@ h1 {
   bottom: 0;
   left: 0;
   /* width: 45px; */
-  margin: 5px;  
+  margin: 5px;
   padding: 2px;
   text-align: middle;
   border: none;
@@ -330,8 +330,8 @@ h1 {
   color: black;
 }
 
-.signOutBtn:hover{
-  background-color: #164F92;
+.signOutBtn:hover {
+  background-color: #164f92;
   color: white;
 }
 
@@ -413,7 +413,7 @@ h1 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-left: 3%;  
+  margin-left: 3%;
   margin-bottom: 10px;
 }
 
@@ -593,7 +593,7 @@ h1 {
   background-color: white;
   border-radius: 5px;
   border: solid 1px rgb(207, 205, 205);
-  margin-top:-10px;
+  margin-top: -10px;
   padding: 10px;
   font-size: 15px;
   width: 350px;
@@ -604,16 +604,15 @@ h1 {
   cursor: pointer;
 }
 .existingUserBtn {
-  margin-top:-10px;
+  margin-top: -10px;
   font-size: 15px;
   cursor: pointer;
   border: None;
-  background-color: #f7f7f7;
+  background-color: transparent;
 }
 
 #existingtext {
-  margin-top:-10px;
-
+  margin-top: -10px;
 }
 
 .continueWithBtn:hover {
@@ -640,14 +639,14 @@ h1 {
   padding: 10px;
   margin: 5px;
 }
-#signup{
-  margin-bottom:20px;
+#signup {
+  margin-bottom: 20px;
 }
 
-#existing{
-  margin-bottom:10px;
+#existing {
+  margin-bottom: 10px;
 }
-.text-container{
+.text-container {
   display: flex;
   align-items: center;
   text-align: center;
@@ -661,10 +660,14 @@ h1 {
 
 .or {
   padding: 18px; /* Adjust the padding as needed */
-  color: grey; /* Adjust the color as needed */
   font-weight: bold; /* Optional */
 }
 .investmentsAdjusted:hover {
   transform: scale(1.05);
   background-color: rgb(154, 190, 231);
+}
+.error{
+  color:red;
+  margin-top: 5px;
+  margin-bottom: 0px;
 }

@@ -17,18 +17,16 @@
       <strong id="signup"> Sign in with your email address and password</strong>
       <input class="inputBox" type="text" placeholder="Email" v-model="email" />
       <input class="inputBox" type="password" placeholder="Password" v-model="password" />
-      <p v-if="errMsg"> {{ errMsg }}</p>
+      <p class="error" v-if="errorMessage">{{ errorMessage }}</p>
     </div>
 
     <button @click="signIn" id="nextBtn"> Submit </button>
-
   </div>
 
 
 </template>
 
 <script setup>
-import firebaseApp from '@/firebase.js';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 import { ref } from "vue";
@@ -38,61 +36,42 @@ const email = ref("");
 const password = ref("")
 const errMsg = ref()
 const router = useRouter()
+const errorMessage = ref();
+import firebaseApp from "@/firebase";
+const auth = getAuth()
 
-const signIn = () => {
-  const auth = getAuth()
-  signInWithEmailAndPassword(getAuth(), email.value, password.value)
-    .then((data) => {
-      console.log("Successfully signed in!");
-      console.log(auth.currentUser)
-      router.push('/')
-    })
-    .catch((error) => {
-      console.log(error.code);
-      switch (error.code) {
-        case "auth/invalid-email":
-          errMsg.value = "Invalid email";
-          break;
-        case "auth/user-not-found":
-          errMsg.value = "No account with that email was found";
-          break;
-        case "auth/wrong-password":
-          errMsg.value = "Incorrect password";
-          break;
-        default:
-          errMsg.value = "Email or password was incorrect";
-          break;
-      }
-      alert(error.message);
-    })
+const signIn = async () => {
+  try {
+    await signInWithEmailAndPassword(auth, email.value, password.value);
+    console.log("Successfully signed in!", auth.currentUser);
+    router.push('/');
+  } catch (error) {
+    handleError(error);
+  }
 };
 
-const signInWithGoogle = () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(getAuth(), provider)
-    .then((result) => {
-      console.log(result.user)
-      router.push("/");
-    }).catch((error) => {
-      console.error(error);
-    });
+const signInWithGoogle = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    router.push("/");
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 const newuser = () => {
-  router.push('/register')
+  router.push('/register');
+};
+
+function handleError(error) {
+  console.error(error);
+  if (error.code === "auth/invalid-credential") {
+    errorMessage.value = "Invalid email or password";
+  } else if (error.code === "auth/user-not-found") {
+    errorMessage.value = "No account with that email was found";
+  } else {
+    errorMessage.value = "Please try again";
+  }
 }
-
-// }
-// Initialize Firebase Authentication and get a reference to the auth service
-// const auth = getAuth(app);
-
-// export default {
-//   methods: {
-//     signInWithGoogle() {
-//       const provider = new GoogleAuthProvider();
-
-//
-//     }
-//   }
-// }
 </script>
