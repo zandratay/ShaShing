@@ -1,4 +1,6 @@
 <template>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
     <div v-for="c in stockList" class="card-container">
         <div class="card" :class="{ expanded: isStockCardExpanded(c) }" @click="toggleExpand(c)">
             <div class="card-header">
@@ -25,9 +27,19 @@
                     </tr>
                 </tbody>
             </table>
-            <p style = "text-align: center"> Page at: {{ cPage(c) }} of {{ tPages(c) }}</p>
-            <button @click="pPage(c)"> previous </button>
-            <button @click="nPage(c)"> next </button>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;"> 
+                <button @click="pPage(c)" 
+                    style="background:none; border:none; font-size:20px; cursor:pointer; "> 
+                    <i class="fas fa-arrow-left"></i> 
+                </button>
+                <p style = "text-align: center"> Page: {{ cPage(c) }} of {{ tPages(c) }}</p>
+                <button @click="nPage(c)" 
+                    style="background:none; border:none; font-size:20px; cursor:pointer; "> 
+                    <i class="fas fa-arrow-right"></i> 
+                </button>
+            </div>
+            
         </div>
 
     </div>

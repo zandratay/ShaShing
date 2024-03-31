@@ -1,7 +1,7 @@
 <template>
 
     <div id = "header-bar">
-        <img id = "header-img" src="https://wallpapers.com/images/featured/widescreen-3ao0esn9qknhdudj.jpg" alt="Duck UI">
+        <img id = "header-img" src="https://mergersandinquisitions.com/wp-content/uploads/2019/06/cat-investment-banking-banner.jpg" alt="Duck UI">
         <input id = "header-input" type="text" placeholder = "Search Keyword..." @change="emitInputValue">
 
     </div>

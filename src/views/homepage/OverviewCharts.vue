@@ -10,10 +10,8 @@
 
       <div class="pie-chart">
         <h1 class="heading">Your Asset Composition</h1>
-        <pie-chart
-          style="margin-left: 5px; position: relative; height: 80%; width: 100%"
-          :data="chartDataForPie"
-        ></pie-chart>
+        <pie-chart style="margin-left: 5px; position: relative; height: 80%; width: 100%"
+          :data="chartDataForPie"></pie-chart>
       </div>
     </div>
 
@@ -22,36 +20,19 @@
         <h3 class="heading" style="margin-top: 2px">Your Portfolio</h3>
 
         <div class="buttons-container">
-          <!-- Use dynamic class binding to apply active style -->
-          <button
-            :class="{ active: activeView === 'day' }"
-            class="view-button"
-            @click="dayview()"
-          >
-            Last 24h
+          <button :class="{ active: activeView === 'week' }" class="view-button" @click="weekview()">
+            1W
           </button>
-          <button
-            :class="{ active: activeView === 'week' }"
-            class="view-button"
-            @click="weekview()"
-          >
-            Last 7d
+          <button :class="{ active: activeView === 'month' }" class="view-button" @click="monthview()">
+            1M
           </button>
-          <button
-            :class="{ active: activeView === 'month' }"
-            class="view-button"
-            @click="monthview()"
-          >
-            Last 30d
+          <button :class="{ active: activeView === 'year' }" class="view-button" @click="yearview()">
+            1Y
           </button>
         </div>
-        <line-chart
-          :data="chartdata"
-          :library="{
+        <line-chart :data="chartdata" :library="{
             elements: { line: { tension: 0 }, point: { radius: 0 } },
-          }"
-          style="padding-left: 10px; position: relative"
-        ></line-chart>
+          }" style="padding-left: 10px; position: relative"></line-chart>
       </div>
     </div>
   </div>
@@ -68,7 +49,7 @@ export default {
     return {
       activeView: "week", // Track active view
       chartdata: {},
-      chartdata2: { Bonds: 1000, CPF: 2000, Stocks: 500, Cash: 100 },
+      chartdata2: {},
       // Additional state properties for fetched data
       assets: [],
       simulatedTime: null, // Store the simulated time globally
@@ -177,35 +158,6 @@ export default {
         );
       }
     },
-    generateFixedRandomTime() {
-      if (!this.simulatedTime) {
-        // Check if the time has already been generated
-        const randomPastMillisec = Math.floor(
-          Math.random() * 24 * 60 * 60 * 1000
-        );
-        this.simulatedTime = new Date(
-          new Date().getTime() - randomPastMillisec
-        );
-        this.simulatedAmount = Math.floor(Math.random() * 1000); // Random amount for the asset
-      }
-    },
-    generateSixHourIntervalLabels() {
-      const labels = {};
-      const now = new Date();
-      // Start 24 hours ago from 'now'
-      const startOfPeriod = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-
-      for (let i = 0; i < 24; i += 6) {
-        const time = new Date(startOfPeriod.getTime() + i * 60 * 60 * 1000);
-        const label = `${time.getHours()}:00`;
-        labels[label] = 0; // Start all labels at 0
-      }
-
-      // Add label for the current time
-      labels[`${now.getHours()}:00`] = 0;
-
-      return labels;
-    },
     calculateHistoricalCumulativeSum(assetsObject, daysBeforeNow) {
       const now = new Date();
       const startOfTimeframe = new Date();
@@ -214,7 +166,7 @@ export default {
       let historicalCumulativeSum = 0;
       let sums = {};
 
-      // First, calculate the cumulative sum up to the start of the timeframe
+      // Calculate the cumulative sum up to the start of the timeframe
       Object.values(assetsObject).forEach((assetArray) => {
         if (Array.isArray(assetArray)) {
           assetArray.forEach((asset) => {
@@ -232,12 +184,10 @@ export default {
 
       // Initialize the sums with the historical cumulative sum for each day up to 'now'
       for (let i = daysBeforeNow; i >= 0; i--) {
-        const date = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate() - i
-        );
-        const label = `${date.getDate()}/${date.getMonth() + 1}`;
+        const date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+        const label = daysBeforeNow === 364 ?
+          `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` :
+          `${date.getDate()}/${date.getMonth() + 1}`;
         sums[label] = historicalCumulativeSum;
       }
 
@@ -250,24 +200,18 @@ export default {
               const purchaseDate = new Date(year, month - 1, day); // Adjust for zero-based month index
 
               if (purchaseDate >= startOfTimeframe && purchaseDate <= now) {
-                const label = `${purchaseDate.getDate()}/${
-                  purchaseDate.getMonth() + 1
-                }`;
+                const label = daysBeforeNow === 364 ?
+                  `${purchaseDate.getDate()}/${purchaseDate.getMonth() + 1}/${purchaseDate.getFullYear()}` :
+                  `${purchaseDate.getDate()}/${purchaseDate.getMonth() + 1}`;
                 const amount = parseFloat(asset.amount);
+
                 // Add amount to the historical sum from this date onwards
-                for (
-                  let j = purchaseDate.getDate() - startOfTimeframe.getDate();
-                  j <= daysBeforeNow;
-                  j++
-                ) {
-                  const futureDate = new Date(
-                    startOfTimeframe.getFullYear(),
-                    startOfTimeframe.getMonth(),
-                    startOfTimeframe.getDate() + j
-                  );
-                  const futureLabel = `${futureDate.getDate()}/${
-                    futureDate.getMonth() + 1
-                  }`;
+                for (let j = (purchaseDate - startOfTimeframe) / (1000 * 60 * 60 * 24); j <= daysBeforeNow; j++) {
+                  const futureDate = new Date(startOfTimeframe.getTime() + j * (1000 * 60 * 60 * 24));
+                  const futureLabel = daysBeforeNow === 364 ?
+                    `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}` :
+                    `${futureDate.getDate()}/${futureDate.getMonth() + 1}`;
+
                   if (sums[futureLabel] !== undefined) {
                     sums[futureLabel] += amount;
                   }
@@ -278,64 +222,22 @@ export default {
         }
       });
       return sums;
-    },
-
-    // Views
-    dayview() {
-      const now = new Date();
-
-      // Set the active view to 'day'
-      this.activeView = "day";
-
-      // Generate the fixed random time and amount, if not already done
-      if (!this.simulatedTime || !this.simulatedAmount) {
-        this.generateFixedRandomTime();
-      }
-
-      // Generate labels for the past 24 hours at 6-hour intervals
-      const labelsForPast24Hours = this.generateSixHourIntervalLabels();
-
-      // Calculate the historical cumulative sum for the assets
-      const historicalData = this.calculateHistoricalCumulativeSum(
-        this.assets,
-        0
-      ); // Only today's data
-
-      // Simulated label based on the fixed random time
-      const randomHourLabel = `${this.simulatedTime.getHours()}:00`;
-
-      // Add the simulated amount to the historicalData at the simulated time
-      historicalData[randomHourLabel] =
-        (historicalData[randomHourLabel] || 0) + this.simulatedAmount;
-
-      // Merge labels for past 24 hours with the historical data
-      this.chartdata = { ...labelsForPast24Hours, ...historicalData };
-
-      // Filter chartdata to include only the last 24 hours
-      const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-      this.chartdata = Object.fromEntries(
-        Object.entries(this.chartdata).filter(([label]) => {
-          const [hours] = label.split(":");
-          const labelTime = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate(),
-            parseInt(hours)
-          );
-          return labelTime >= twentyFourHoursAgo && labelTime <= now;
-        })
-      );
-    },
-
+    }
+    ,
     weekview() {
       this.activeView = "week";
       // Adjust the days parameter as needed for accurate timeframe calculation
-      this.chartdata = this.calculateHistoricalCumulativeSum(this.assets, 7);
+      this.chartdata = this.calculateHistoricalCumulativeSum(this.assets, 6);
     },
     monthview() {
       this.activeView = "month";
       // Adjust the days parameter as needed for accurate timeframe calculation
-      this.chartdata = this.calculateHistoricalCumulativeSum(this.assets, 30);
+      this.chartdata = this.calculateHistoricalCumulativeSum(this.assets, 29);
+    },
+    yearview() {
+      this.activeView = "year";
+      // Adjust the days parameter as needed for accurate timeframe calculation
+      this.chartdata = this.calculateHistoricalCumulativeSum(this.assets, 364);
     },
   },
 

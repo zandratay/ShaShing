@@ -70,12 +70,16 @@
         </div>
         <div class="forms">
           <label>Current price</label>
+          
+              <input
+              v-model="amount"
+              type="number"
+              placeholder="Enter current price"
+              class="selectInputs"
+            />
+          
+          
 
-          <input
-            v-model="amount"
-            placeholder="Enter current price"
-            class="selectInputs"
-          />
         </div>
       </div>
       <div class="nextButton">

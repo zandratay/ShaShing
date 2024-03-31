@@ -31,13 +31,9 @@
             class="selectInputs"
           />
           <label class="inputDiv">Current Price</label>
-          <input
-            v-model="purchasePrice"
-            placeholder="Enter current price"
-            class="selectInputs"
-          />
-          <label class="inputDiv">Country name</label>
-          <div class="selectButtons">
+          <input v-model="purchasePrice" type="number" placeholder="Enter current price" class="selectInputs"/>
+            <label class="inputDiv">Country name</label>
+            <div class="selectButtons">
             <button @click="openDropDown" class="buttonBg">
               {{ selectedCountry ? selectedCountry : "Select Country" }}
             </button>
@@ -66,13 +62,16 @@
           </div>
           <div class="forms">
             <label class="inputDiv">Purchase date</label>
+
             <input
+              type="date"
               v-model="purchaseDate"
               placeholder="Enter purchase date"
               class="selectInputs"
               @input="validateDate(purchaseDate)"
             />
             <div v-if="dateError" class="error">{{ dateError }}</div>
+
           </div>
         </div>
       </div>

@@ -32,17 +32,15 @@
             class="selectInputs"
           />
           <label class="inputDiv">Current Price</label>
-          <input
-            v-model="purchasePrice"
-            placeholder="Enter current price"
-            class="selectInputs"
-          />
-          <label class="inputDiv">Country name</label>
-          <div class="selectButtons">
-            <button @click="openDropDown" class="buttonBg">
-              {{ selectedCountry ? selectedCountry : "Select Country" }}
-            </button>
-          </div>
+          <input type="number" v-model="purchasePrice" placeholder="Enter current price" class="selectInputs" />
+            <label 
+              class="inputDiv">Country name</label>
+            <div class="selectButtons">
+              <button @click="openDropDown" class="buttonBg">
+            {{ selectedCountry ? selectedCountry : "Select Country" }}
+          </button>
+
+            </div>
           <div v-if="dropDown">
             <div class="investments">
               <button @click="selectCountry('USA')" class="buttonBg">
@@ -67,6 +65,7 @@
           </div>
           <div class="forms">
             <label class="inputDiv">Purchase date</label>
+
             <input
               v-model="purchaseDate"
               placeholder="Enter purchase date"

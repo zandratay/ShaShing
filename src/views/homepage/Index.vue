@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <NavBar/>
+    <NavBar />
   </div>
 
   <div class="content">
@@ -17,7 +17,6 @@
       @updateCPF="handleUpdateAssetClassCPF"
     />
   </div>
-
 </template>
 
 <script>
@@ -26,6 +25,11 @@ import OverviewCharts from "./OverviewCharts.vue";
 import AssetClass from "./AssetClass.vue";
 import NavBar from "./NavBar.vue";
 import AddInvestment from "./AddInvestment.vue";
+
+
+import firebaseApp from "@/firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 
 export default {
   components: {
@@ -40,6 +44,7 @@ export default {
     return {
       addInvestment: false,
       clicked: false,
+      user: null,
       cashUpdated: false,
       stocksUpdated: false,
       bondsUpdated: false,
@@ -47,15 +52,19 @@ export default {
     };
   },
 
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      this.user = user;
+    });
+  },
+
   methods: {
     getData(data) {
       this.addInvestment = data;
     },
-
     setData(data) {
       this.addInvestment = data;
     },
-
     handleUpdateAssetClassCash(data) {
       this.cashUpdated = data;
     },
