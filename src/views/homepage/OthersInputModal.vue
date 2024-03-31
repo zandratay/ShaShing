@@ -1,7 +1,11 @@
 <template>
-    <div class="modal-overlay" :class="{ 'active': isOpened }" @click="closeModal"></div>
+  <div
+    class="modal-overlay"
+    :class="{ active: isOpened }"
+    @click="closeModal"
+  ></div>
 
-    <div class="modal" v-if="isOpened">
+  <div class="modal" v-if="isOpened">
     <div class="investment">
       <text class="addInvestment">Others</text>
       <button @click="close" class="buttonBgFit">
@@ -41,7 +45,9 @@
               v-model="purchaseDate"
               placeholder="Enter purchase date"
               class="selectInputs"
+              @input="validateDate(purchaseDate)"
             />
+            <div v-if="dateError" class="error">{{ dateError }}</div>
           </div>
           <div class="forms">
             <label class="inputDiv">Description</label>
@@ -60,8 +66,6 @@
       </div>
     </div>
   </div>
-
-    
 </template>
 <script>
 import {
@@ -74,6 +78,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import app from "../../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 export default {
   props: ["isOpened"],
 
@@ -83,8 +89,17 @@ export default {
       purchasePrice: "",
       purchaseDate: "",
       description: "",
+      user: null,
+      dateError: "",
     };
   },
+
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      this.user = user;
+    });
+  },
+
   methods: {
     close() {
       this.$emit("isEmitOthers", false);
@@ -94,32 +109,80 @@ export default {
       this.description = "";
     },
 
-    async submit() {
-      const userId = "18880";
-      var db = getFirestore(app);
-      const docRef = doc(db, "users", userId);
-      const data = await getDoc(docRef);
+    validateDate(dateString) {
+      if (!dateString.trim()) {
+        this.dateError = "";
+        return true; // Consider empty input as valid for this specific check
+      }
+      const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+      const matches = dateString.match(regex);
+      if (matches) {
+        const day = parseInt(matches[1], 10);
+        const month = parseInt(matches[2], 10) - 1; // JavaScript months are 0-indexed
+        const year = parseInt(matches[3], 10);
+        const inputDate = new Date(year, month, day);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset today's time to ensure accurate comparison
 
-      if (!data.exists()) {
-        await setDoc(docRef, {
-          id: userId,
-          cash: [],
-          bonds: [],
-          cpf: [],
-          stocks: [],
-          others: [ {assetName: this.assetName, amount: this.purchasePrice, purchaseDate: this.purchaseDate, description: this.description} ],
-        });
+        if (inputDate > today) {
+          this.dateError = "Date must not be in the future.";
+          return false;
+        } else {
+          this.dateError = "";
+          return true;
+        }
       } else {
-        const existing = data.data().others;
-        await updateDoc(docRef, {
-          others: [
-            ...existing,
-            { assetName: this.assetName, amount: this.purchasePrice, purchaseDate: this.purchaseDate, description: this.description},
-          ],
-        });
+        this.dateError = "Format: DD/MM/YYYY.";
+        return false;
+      }
+    },
+
+    async submit() {
+      if (!this.validateDate(this.purchaseDate)) {
+        this.dateError = "Format: DD/MM/YYYY.";
+        return; // Exit the submit function early
       }
 
-      console.log("successful");
+      this.dateError = "";
+      if (this.user) {
+        const userId = this.user.uid;
+        var db = getFirestore(app);
+        const docRef = doc(db, "users", userId);
+        const data = await getDoc(docRef);
+
+        if (!data.exists()) {
+          await setDoc(docRef, {
+            id: userId,
+            cash: [],
+            bonds: [],
+            cpf: [],
+            stocks: [],
+            others: [
+              {
+                assetName: this.assetName,
+                amount: this.purchasePrice,
+                purchaseDate: this.purchaseDate,
+                description: this.description,
+              },
+            ],
+          });
+        } else {
+          const existing = data.data().others;
+          await updateDoc(docRef, {
+            others: [
+              ...existing,
+              {
+                assetName: this.assetName,
+                amount: this.purchasePrice,
+                purchaseDate: this.purchaseDate,
+                description: this.description,
+              },
+            ],
+          });
+        }
+
+        console.log("successful");
+      }
     },
   },
 };

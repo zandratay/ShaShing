@@ -141,7 +141,8 @@
   
         // Now, open the correct modal
         if (asset === "Cash") {
-          this.modals.cash = true;
+
+        this.modals.cash = true;
         } else if (asset === "Bonds") {
           this.modals.bonds = true;
         } else if (asset === "Stocks") {
@@ -150,7 +151,7 @@
           this.modals.cpf = true;
         }
       },
-  
+      
       async fetchCash() {
         const userId = "177889";
         var db = getFirestore(app);
@@ -193,4 +194,3 @@
     },
   };
   </script>
-  

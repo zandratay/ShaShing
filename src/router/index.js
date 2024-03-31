@@ -4,23 +4,28 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import store from '../store';
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes: [
-      { path: '/', 
-        component: () => import("../views/homepage/Index.vue"),
-        meta:{
-          requiresAuth: true,
-        }, 
-        name: 'home' },
-      { path: '/login', component: () => import("../views/Login.vue"), name: 'login' },
-      { path: '/register', component: () => import("../views/Register.vue"), name: 'register' },
-      { path: '/newspage', component: () => import("../views/newspage/NewsPage.vue"),
-       meta: {
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      component: () => import("../views/homepage/Index.vue"),
+      meta: {
         requiresAuth: true,
-      }, 
-      name: 'newspage'},
-      { path: '/repository', component: () => import("../views/repository/RepositoryPage.vue"), name: 'repository'}
-    ],
+      },
+      name: 'home'
+    },
+    { path: '/login', component: () => import("../views/Login.vue"), name: 'login' },
+    { path: '/register', component: () => import("../views/Register.vue"), name: 'register' },
+    {
+      path: '/newspage', 
+      component: () => import("../views/newspage/NewsPage.vue"), 
+      meta: {
+        requiresAuth: true,
+      },
+      name: 'newspage',
+    },
+    { path: '/repository', component: () => import("../views/repository/RepositoryPage.vue"), name: 'repository'}
+  ],
 });
 
 const getCurrentUser = () => {
