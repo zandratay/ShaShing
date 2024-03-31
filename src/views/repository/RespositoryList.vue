@@ -2,7 +2,7 @@
     <div v-for="c in stockList" class="card-container">
         <div class="card" :class="{ expanded: isStockCardExpanded(c) }" @click="toggleExpand(c)">
             <div class="card-header">
-                <h2> {{ c }} </h2>
+                <h2> {{getCompanyname(c)}} ({{ c }})</h2>
             </div>
         </div>
 
@@ -42,6 +42,8 @@
 import axios from 'axios';
 import { getFirestore, getDoc, doc } from "firebase/firestore";
 import app from "../../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 
 export default {
     data() {
@@ -53,7 +55,8 @@ export default {
             apiKey: 'cno43t1r01qpkl7ddec0cno43t1r01qpkl7ddecg',
             tableHeader: ['Date', 'Report Type', 'Link'],
             pageAt: 1,
-            rowsPerPage: 5
+            rowsPerPage: 5,
+            user: null
         };
     },
     props: {
@@ -190,69 +193,116 @@ export default {
                     this.cardsParameters[objIndex].pageAt = pgAt - 1;
                 }  
             }
-        }      
+        },
+        async fillStockListCardParameter() {
+            this.stockList = this.initialStockList;
+            const filingsPromises =  this.stockList.map(stock => this.stockFillingsToCardList(stock, "10-Q"));
+            const filingsResults = await Promise.all(filingsPromises);
+
+            const filingsPromises2 =  this.stockList.map(stock => this.stockFillingsToCardList(stock, "10-K"));
+            const filingsResults2 = await Promise.all(filingsPromises2);
+
+            this.cardsParameters = this.stockList.map((stock, index) => ({
+                stock: stock,
+                isExpanded: false,
+                pageAt: 1,
+                data: filingsResults[index].concat(filingsResults2[index]).sort((a, b) => new Date(b.date) - new Date(a.date))
+            }));
+        },
+        toNotifyEmit() {
+            // To send the top three latest reports to the Notification page 
+            const toNotify = this.cardsParameters.map((item, index) => ({
+                stock: item.stock,
+                report: item.data.slice(0,3).map(item => item.reportType),
+                date: item.data.slice(0,3).map(item => item.date)
+            }));
+
+            // console.log(toNotify);
+
+            // Flatten the list to a single array of { date, stock } objects
+            const flattenedList = toNotify.flatMap(stock =>
+                stock.date?.map((date, index) => ({
+                    date,
+                    report: stock.report[index],
+                    stock: stock.stock
+                }))
+            );
+            // console.log(flattenedList);
+
+            // Sort by date in descending order
+            const sortedByDate = flattenedList.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Select the top three latest dates
+            const topThree = sortedByDate.slice(0, 3);
+            // console.log(topThree);
+
+            this.$emit('notification-output', topThree);
+            this.$emit('noSavedStocks', this.initialStockList.length == 0);
+        },
+        async fetchStock() {
+            if (this.user) {
+                const userId = this.user.uid;
+                var db = getFirestore(app);
+                const docRef = doc(db, "users", userId);
+                const data = await getDoc(docRef);
+                if (data.exists()) {
+                    // this.stocks = data.data().stocks;
+                    // console.log(data.data().stocks)
+
+                    this.initialStockList = data.data().stocks.map((stock, index) => (
+                        stock.tickerName
+                    ));
+
+                    this.stockCompanyName = data.data().stocks.map((stock, index) => (
+                        stock.stockName
+                    ));
+
+                    // console.log(this.initialStockList);
+                }
+
+                await this.fillStockListCardParameter();
+
+                this.toNotifyEmit();
+                
+            }
+        },   
+        getCompanyname(stockTicker) {
+            const objIndex = this.cardsParameters.findIndex(obj => obj.stock === stockTicker);
+
+            return this.stockCompanyName[objIndex];
+        }   
     },
     async mounted() {
+        await onAuthStateChanged(auth, (user) => {
+            if (user) {
+                this.user = user;
+                // console.log("got user!");
+
+                // Now that we have a user, fetch their data
+                this.fetchStock();                
+
+            } else {
+                // Handle user not logged in
+                this.user = null;
+            }
+        });
+
+        // onAuthStateChanged();
         // Constant userID of 177889. To update 
-        const userId = "177889";
-        var db = getFirestore(app);
-        const docRef = doc(db, "users", userId);
-        const data = await getDoc(docRef);
+        // const userId = "177889";
+        // var db = getFirestore(app);
+        // const docRef = doc(db, "users", userId);
+        // const data = await getDoc(docRef);
 
         // console.log(data.data().stocks);
 
-        this.initialStockList = data.data().stocks.map((stock, index) => (
-            stock.tickerName
-        ));
+        // this.initialStockList = data.data().stocks.map((stock, index) => (
+        //     stock.tickerName
+        // ));
 
-        this.stockCompanyName = data.data().stocks.map((stock, index) => (
-            stock.stockName
-        ));
-
-        this.stockList = this.initialStockList;
-        const filingsPromises =  this.stockList.map(stock => this.stockFillingsToCardList(stock, "10-Q"));
-        const filingsResults = await Promise.all(filingsPromises);
-
-        const filingsPromises2 =  this.stockList.map(stock => this.stockFillingsToCardList(stock, "10-K"));
-        const filingsResults2 = await Promise.all(filingsPromises2);
-
-        this.cardsParameters = this.stockList.map((stock, index) => ({
-            stock: stock,
-            isExpanded: false,
-            pageAt: 1,
-            data: filingsResults[index].concat(filingsResults2[index]).sort((a, b) => new Date(b.date) - new Date(a.date))
-        }));
-
-        // To send the top three latest reports to the Notification page 
-        const toNotify = this.cardsParameters.map((item, index) => ({
-            stock: item.stock,
-            report: item.data.slice(0,3).map(item => item.reportType),
-            date: item.data.slice(0,3).map(item => item.date)
-        }));
-
-        // console.log(toNotify);
-
-        // Flatten the list to a single array of { date, stock } objects
-        const flattenedList = toNotify.flatMap(stock =>
-            stock.date?.map((date, index) => ({
-                date,
-                report: stock.report[index],
-                stock: stock.stock
-            }))
-        );
-
-        // console.log(flattenedList);
-
-        // Sort by date in descending order
-        const sortedByDate = flattenedList.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        // Select the top three latest dates
-        const topThree = sortedByDate.slice(0, 3);
-
-        // console.log(topThree);
-
-        this.$emit('notification-output', topThree);
-        this.$emit('noSavedStocks', this.initialStockList.length == 0);
+        // this.stockCompanyName = data.data().stocks.map((stock, index) => (
+        //     stock.stockName
+        // ));
 
     }
 }
