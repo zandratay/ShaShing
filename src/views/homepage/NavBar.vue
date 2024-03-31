@@ -2,7 +2,7 @@
     <div class="nav-container">
 
         <div class="profile-information">
-            <img id="duck-ui" src="https://content.instructables.com/FS1/ETHN/LGC9WODA/FS1ETHNLGC9WODA.png?auto=webp&fit=bounds&frame=1" alt="Duck UI">
+            <img id="duck-ui" src="/logo.jpg" alt="Duck UI">
             <strong> Duck UI </strong>
         </div>
 
