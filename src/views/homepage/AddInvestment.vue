@@ -71,9 +71,21 @@
       
     </div>
 
-    <CashInputModal v-model:isOpened="isCash" @isEmitCash="setDataCash" />
-    <CPFInputModal v-model:isOpened="isCPF" @isEmitCPF="setDataCPF" />
-    <BondsInputModal v-model:isOpened="isBonds" @isEmitBonds="setDataBonds" />
+    <CashInputModal
+      v-model:isOpened="isCash"
+      @isEmitCash="setDataCash"
+      @cashSubmitted="setUpdateCash"
+    />
+    <CPFInputModal
+      v-model:isOpened="isCPF"
+      @isEmitCPF="setDataCPF"
+      @cpfSubmitted="setUpdateCPF"
+    />
+    <BondsInputModal
+      v-model:isOpened="isBonds"
+      @isEmitBonds="setDataBonds"
+      @bondsSubmitted="setUpdateBonds"
+    />
     <OthersInputModal
       v-model:isOpened="isOthers"
       @isEmitOthers="setDataOthers"
@@ -81,6 +93,7 @@
     <StocksInputModal
       v-model:isOpened="isStocks"
       @isEmitStocks="setDataStocks"
+      @stocksSubmitted="setUpdateStocks"
     />
   </div>
 </template>
@@ -146,10 +159,6 @@ export default {
       this.$emit("clicked", false);
     },
 
-    closeModal() {
-      this.isInvestment = false; // This will hide both the modal and the overlay
-    },
-
     setDataCash(data) {
       this.isCash = data;
       this.selectedInvestment = "";
@@ -173,6 +182,22 @@ export default {
     setDataOthers(data) {
       this.isOthers = data;
       this.selectedInvestment = "";
+    },
+
+    setUpdateCash(data) {
+      this.$emit("updateAssets", data);
+    },
+
+    setUpdateStocks(data) {
+      this.$emit("updateStocks", data);
+    },
+
+    setUpdateBonds(data) {
+      this.$emit("updateBonds", data);
+    },
+
+    setUpdateCPF(data) {
+      this.$emit("updateCPF", data);
     },
   },
 };
