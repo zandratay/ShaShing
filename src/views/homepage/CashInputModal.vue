@@ -44,6 +44,7 @@
             <label>Current price</label>
             <input
               v-model="amount"
+              type="number"
               placeholder="Enter current price"
               class="selectInputs"
             />
@@ -52,6 +53,7 @@
             <label class="inputDiv">Purchase date</label>
             <input
               v-model="purchaseDate"
+              type="date"
               placeholder="Enter purchase date"
               class="selectInputs"
             />

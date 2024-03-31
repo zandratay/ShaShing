@@ -13,7 +13,7 @@
           <label>Stock Name</label>
           <input v-model="stockName" placeholder="Enter stocker name" class="selectInputs"/>
           <label class="inputDiv">Current Price</label>
-          <input v-model="purchasePrice" placeholder="Enter current price" class="selectInputs"/>
+          <input v-model="purchasePrice" type="number" placeholder="Enter current price" class="selectInputs"/>
             <label class="inputDiv">Country name</label>
             <div class="selectButtons">
             <button @click="openDropDown" class="buttonBg">
@@ -37,7 +37,7 @@
           </div>
           <div class="forms">
             <label class="inputDiv">Purchase date</label>
-            <input v-model="purchaseDate" placeholder="Enter purchase date" class="selectInputs"/>
+            <input type="date" v-model="purchaseDate" placeholder="Enter purchase date" class="selectInputs"/>
           </div>
          
         </div>
