@@ -3,15 +3,15 @@
 
         <div class="profile-information">
             <img id="duck-ui" src="/logo.jpg" alt="Duck UI">
-            <strong> Duck UI </strong>
+            <strong> Sha-Shing </strong>
         </div>
 
         <nav class="left-nav">
             <ul>
-                <li><router-link to="/"> Overview </router-link></li>
-                <li><router-link to="/repository"> Financial Reports </router-link></li>
-                <li><router-link to="/newspage" >Financial News</router-link></li>
-                <li><button @click="handleSignOut" v-if="isLoggedIn"> Sign out</button></li>
+                <li><router-link to="/" style="color: #164f92; text-decoration: none;"> Overview </router-link></li>
+                <li><router-link to="/repository" style="color: #164f92; text-decoration: none;"> Financial Reports </router-link></li>
+                <li><router-link to="/newspage" style="color: #164f92; text-decoration: none;">Financial News</router-link></li>
+                
             </ul>
             <button class="signOutBtn" @click="handleSignOut" v-if="isLoggedIn"> Sign out</button>
             <router-view />
