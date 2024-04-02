@@ -49,7 +49,7 @@
             </div>
           </div> -->
         </div></div>
-      <CashModal v-model:isVisible="modals.cash" />
+      <CashModal v-model:isVisible="modals.cash"/>
       <StocksModal v-model:isVisible="modals.stocks" />
       <BondsModal v-model:isVisible="modals.bonds" />
       <CPFModal v-model:isVisible="modals.cpf" />
