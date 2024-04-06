@@ -39,8 +39,10 @@
 </template>
 
 <script>
-import firebaseApp from "@/firebase.js";
+import firebaseApp from "@/firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+const auth = getAuth();
 
 export default {
   name: "OverviewCharts",
@@ -53,7 +55,16 @@ export default {
       assets: [],
       simulatedTime: null, // Store the simulated time globally
       simulatedAmount: null, // Store the simulated amount globally
+      user:null,
     };
+  },
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      this.user = user;
+      if (user) {
+        this.fetchData();
+      }
+    });
   },
   computed: {
     totalNetWorth() {
@@ -114,8 +125,9 @@ export default {
   },
   methods: {
     fetchData() {
+      const userId = this.user.uid;
       const db = getFirestore(firebaseApp);
-      const userDocRef = doc(db, "users", "177889");
+      const userDocRef = doc(db, "users", userId);
 
       onSnapshot(
         userDocRef,
@@ -216,10 +228,6 @@ export default {
       // Adjust the days parameter as needed for accurate timeframe calculation
       this.chartdata = this.calculateHistoricalCumulativeSum(this.assets, 364);
     },
-  },
-
-  mounted() {
-    this.fetchData();
   },
 };
 </script>

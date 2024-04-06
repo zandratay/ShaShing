@@ -1,18 +1,36 @@
 <template>
-  <div class="modal-overlay" :class="{ 'active': isOpened }" @click="closeModal"></div>
-  
+  <div
+    class="modal-overlay"
+    :class="{ active: isOpened }"
+    @click="closeModal"
+  ></div>
+
   <div class="modal" v-if="isOpened">
     <div class="investment">
       <text class="addInvestment">Bonds</text>
-      <button @click="close" class="buttonBgFit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-    <path fill="currentColor" d="M6.707 6.293c-.39-.39-1.023-.39-1.414 0-.39.39-.39 1.023 0 1.414l4.793 4.793-4.793 4.793c-.39.39-.39 1.023 0 1.414.39.39 1.023.39 1.414 0l4.793-4.793 4.793 4.793c.39.39 1.023.39 1.414 0 .39-.39.39-1.023 0-1.414l-4.793-4.793 4.793-4.793c.39-.39.39-1.023 0-1.414-.39-.39-1.023-.39-1.414 0l-4.793 4.793-4.793-4.793z"/>
-  </svg></button>
+      <button @click="close" class="buttonBgFit">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+        >
+          <path
+            fill="currentColor"
+            d="M6.707 6.293c-.39-.39-1.023-.39-1.414 0-.39.39-.39 1.023 0 1.414l4.793 4.793-4.793 4.793c-.39.39-.39 1.023 0 1.414.39.39 1.023.39 1.414 0l4.793-4.793 4.793 4.793c.39.39 1.023.39 1.414 0 .39-.39.39-1.023 0-1.414l-4.793-4.793 4.793-4.793c.39-.39.39-1.023 0-1.414-.39-.39-1.023-.39-1.414 0l-4.793 4.793-4.793-4.793z"
+          />
+        </svg>
+      </button>
     </div>
     <div class="formDiv">
       <div class="investment">
         <div class="forms">
           <label>Bond Name</label>
-          <input v-model="bondName" placeholder="Enter bond name" class="selectInputs"/>
+          <input
+            v-model="bondName"
+            placeholder="Enter bond name"
+            class="selectInputs"
+          />
           <label class="inputDiv">Current Price</label>
           <input type="number" v-model="purchasePrice" placeholder="Enter current price" class="selectInputs" />
             <label 
@@ -25,25 +43,36 @@
             </div>
           <div v-if="dropDown">
             <div class="investments">
-              <button @click="selectCountry('USA')" class="buttonBg">USA</button>
+              <button @click="selectCountry('USA')" class="buttonBg">
+                USA
+              </button>
             </div>
             <div class="investments">
-              <button @click="selectCountry('Singapore')" class="buttonBg">Singapore</button>
+              <button @click="selectCountry('Singapore')" class="buttonBg">
+                Singapore
+              </button>
             </div>
           </div>
         </div>
         <div class="forms">
           <div class="forms">
             <label>Identification No.</label>
-            <input v-model="identificationNo" placeholder="Enter identification no" class="selectInputs"/>
+            <input
+              v-model="identificationNo"
+              placeholder="Enter identification no"
+              class="selectInputs"
+            />
           </div>
           <div class="forms">
             <label class="inputDiv">Purchase date</label>
-            <input 
-              v-model="purchaseDate" 
-              type="date"
-              placeholder="Enter purchase date" 
-              class="selectInputs"/>
+
+            <input
+              v-model="purchaseDate"
+              placeholder="Enter purchase date"
+              class="selectInputs"
+              @input="validateDate(purchaseDate)"
+            />
+            <div v-if="dateError" class="error">{{ dateError }}</div>
           </div>
         </div>
       </div>
@@ -64,8 +93,9 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import app from "../../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 export default {
-  
   props: ["isOpened"],
 
   data() {
@@ -76,14 +106,22 @@ export default {
       purchasePrice: "",
       identificationNo: "",
       purchaseDate: "",
+      user: null,
+      dateError: "",
     };
+  },
+
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      this.user = user;
+    });
   },
 
   methods: {
     close() {
       this.$emit("isEmitBonds", false);
       this.$emit("bondsSubmitted", true);
-      this.selectedCountry = ""; 
+      this.selectedCountry = "";
       this.bondName = "";
       this.purchasePrice = "";
       this.purchaseDate = "";
@@ -99,30 +137,83 @@ export default {
       this.dropDown = false;
     },
 
-    async submit() {
-      const userId = '177889'
-      var db = getFirestore(app);
-      const docRef = doc(db, "users", userId)
-      const data = await getDoc(docRef)
+    validateDate(dateString) {
+      if (!dateString.trim()) {
+        this.dateError = "";
+        return true; // Consider empty input as valid for this specific check
+      }
+      const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+      const matches = dateString.match(regex);
+      if (matches) {
+        const day = parseInt(matches[1], 10);
+        const month = parseInt(matches[2], 10) - 1; // JavaScript months are 0-indexed
+        const year = parseInt(matches[3], 10);
+        const inputDate = new Date(year, month, day);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset today's time to ensure accurate comparison
 
-      if (!data.exists()) {
-        await setDoc(docRef, {
-          id: userId, 
-          cash: [],
-          bonds: [{ bondName: this.bondName, amount: this.purchasePrice, selectedCountry: this.selectedCountry, identificationNo: this.identificationNo, purchaseDate: this.purchaseDate}],
-          cpf: [],
-          stocks: [],
-          others: []
-        })
+        if (inputDate > today) {
+          this.dateError = "Date must not be in the future.";
+          return false;
+        } else {
+          this.dateError = "";
+          return true;
+        }
       } else {
-        const existing = data.data().bonds
-        await updateDoc(docRef, {
-          bonds: [...existing, { bondName: this.bondName, amount: this.purchasePrice, selectedCountry: this.selectedCountry, identificationNo: this.identificationNo, purchaseDate: this.purchaseDate }],
-        });
+        this.dateError = "Format: DD/MM/YYYY.";
+        return false;
+      }
+    },
+
+    async submit() {
+      if (!this.validateDate(this.purchaseDate)) {
+        this.dateError = "Format: DD/MM/YYYY.";
+        return; // Exit the submit function early
       }
 
-      console.log("successful");
-    }
+      this.dateError = "";
+      if (this.user) {
+        const userId = this.user.uid;
+        var db = getFirestore(app);
+        const docRef = doc(db, "users", userId);
+        const data = await getDoc(docRef);
+
+        if (!data.exists()) {
+          await setDoc(docRef, {
+            id: userId,
+            cash: [],
+            bonds: [
+              {
+                bondName: this.bondName,
+                amount: this.purchasePrice,
+                selectedCountry: this.selectedCountry,
+                identificationNo: this.identificationNo,
+                purchaseDate: this.purchaseDate,
+              },
+            ],
+            cpf: [],
+            stocks: [],
+            others: [],
+          });
+        } else {
+          const existing = data.data().bonds;
+          await updateDoc(docRef, {
+            bonds: [
+              ...existing,
+              {
+                bondName: this.bondName,
+                amount: this.purchasePrice,
+                selectedCountry: this.selectedCountry,
+                identificationNo: this.identificationNo,
+                purchaseDate: this.purchaseDate,
+              },
+            ],
+          });
+        }
+
+        console.log("successful");
+      }
+    },
   },
 };
 </script>
