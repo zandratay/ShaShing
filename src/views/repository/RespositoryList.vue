@@ -9,35 +9,37 @@
         </div>
 
         <div class="cardExpand" v-show="isStockCardExpanded(c)">
-            <!-- <p> This is some content that will show up when the card is expanded. Click the card to toggle. </p> -->
-            <table class = "stock-repository-table" >
-                <thead>
-                    <tr class = "stock-repository-table-head-row">
-                        <th v-for="header in tableHeader" class = "stock-repository-table-head-cell"> 
-                            {{ header }} 
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="row in getDataForStock(c)?.slice(sliceFillingsToTable(c).beginning, sliceFillingsToTable(c).end)" class = "stock-repository-table-body-row">
-                        <td v-for="cell in row" class = "stock-repository-table-body-cell">
-                            <a v-if="cell.startsWith('https://')" :href="cell"> Link </a>
-                            <p v-else>{{ cell }}</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;"> 
-                <button @click="pPage(c)" 
-                    style="background:none; border:none; font-size:20px; cursor:pointer; "> 
-                    <i class="fas fa-arrow-left"></i> 
-                </button>
-                <p style = "text-align: center"> Page: {{ cPage(c) }} of {{ tPages(c) }}</p>
-                <button @click="nPage(c)" 
-                    style="background:none; border:none; font-size:20px; cursor:pointer; "> 
-                    <i class="fas fa-arrow-right"></i> 
-                </button>
+            <p v-if="getDataForStock(c).length == 0"> oops, the stock ticker is not found! Please check if your stock ticker name is valid </p>
+            <div v-else> 
+                <table class = "stock-repository-table" >
+                    <thead>
+                        <tr class = "stock-repository-table-head-row">
+                            <th v-for="header in tableHeader" class = "stock-repository-table-head-cell"> 
+                                {{ header }} 
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="row in getDataForStock(c)?.slice(sliceFillingsToTable(c).beginning, sliceFillingsToTable(c).end)" class = "stock-repository-table-body-row">
+                            <td v-for="cell in row" class = "stock-repository-table-body-cell">
+                                <a v-if="cell.startsWith('https://')" :href="cell"> Link </a>
+                                <p v-else>{{ cell }}</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;"> 
+                    <button @click="pPage(c)" 
+                        style="background:none; border:none; font-size:20px; cursor:pointer; "> 
+                        <i class="fas fa-arrow-left"></i> 
+                    </button>
+                    <p style = "text-align: center"> Page: {{ cPage(c) }} of {{ tPages(c) }}</p>
+                    <button @click="nPage(c)" 
+                        style="background:none; border:none; font-size:20px; cursor:pointer; "> 
+                        <i class="fas fa-arrow-right"></i> 
+                    </button>
+                </div>
             </div>
             
         </div>
@@ -261,11 +263,11 @@ export default {
                     // this.stocks = data.data().stocks;
                     // console.log(data.data().stocks)
 
-                    this.initialStockList = data.data().stocks.map((stock, index) => (
+                    this.initialStockList = data.data().stocks.filter(stock => stock.selectedCountry === "USA").map((stock, index) => (
                         stock.tickerName
                     ));
 
-                    this.stockCompanyName = data.data().stocks.map((stock, index) => (
+                    this.stockCompanyName = data.data().stocks.filter(stock => stock.selectedCountry === "USA").map((stock, index) => (
                         stock.stockName
                     ));
 

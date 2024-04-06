@@ -4,9 +4,15 @@
             <h4 
             style="font-size: 30px; font-weight: 600; color: black; letter-spacing: 1px; 
             background-color: rgba(255, 255, 255, 0.3);
-            width: 50%; padding: 10px;">
+            width: 50%; padding: 10px; margin-bottom:0%">
                 Latest Financial Reports
             </h4>
+            <h6 
+            style="font-size: 15px; color: black; letter-spacing: 1px; 
+            background-color: rgba(255, 255, 255, 0.3);
+            width: 50%; padding: 10px; margin-top:0% ;">
+                Notice: Only stocks listed in the USA stock exchange are displayed at this page for financial reports viewing
+            </h6>
             <!-- <p v-for="cell in notificationData" class="notification-item"> 
                 {{formatDate(cell.date)}}: {{cell.stock}} released their {{cell.report}} 
             </p> --> 
