@@ -1,4 +1,6 @@
 <template>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
     <div v-for="c in stockList" class="card-container">
         <div class="card" :class="{ expanded: isStockCardExpanded(c) }" @click="toggleExpand(c)">
             <div class="card-header">
@@ -25,11 +27,24 @@
                     </tr>
                 </tbody>
             </table>
-            <p style = "text-align: center"> Page at: {{ cPage(c) }} of {{ tPages(c) }}</p>
-            <button @click="pPage(c)"> previous </button>
-            <button @click="nPage(c)"> next </button>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;"> 
+                <button @click="pPage(c)" 
+                    style="background:none; border:none; font-size:20px; cursor:pointer; "> 
+                    <i class="fas fa-arrow-left"></i> 
+                </button>
+                <p style = "text-align: center"> Page: {{ cPage(c) }} of {{ tPages(c) }}</p>
+                <button @click="nPage(c)" 
+                    style="background:none; border:none; font-size:20px; cursor:pointer; "> 
+                    <i class="fas fa-arrow-right"></i> 
+                </button>
+            </div>
+            
         </div>
 
+    </div>
+    <div v-if="stockList.length == 0" class="card-container">
+        <h2> You have not saved any stocks to your portfolio </h2>
     </div>
 
 </template>
@@ -37,11 +52,14 @@
 
 <script>
 import axios from 'axios';
+import { getFirestore, getDoc, doc } from "firebase/firestore";
+import app from "../../firebase";
 
 export default {
     data() {
         return {
-            initialStockList : ["AAPL", "NVDA", "MSFT", "JPM", "MS"],
+            initialStockList : [],
+            stockCompanyName: [],
             stockList: [],
             cardsParameters: [],
             apiKey: 'cno43t1r01qpkl7ddec0cno43t1r01qpkl7ddecg',
@@ -60,8 +78,27 @@ export default {
 
                 if (newQuery !== "") {
                     let uppercaseQuery = newQuery.toUpperCase();
-                    let filteredList = this.initialStockList.filter(item => item.includes(uppercaseQuery));
-                    // console.log(filteredList);
+                    let filteredStockTickerList = this.initialStockList.filter(item => item.startsWith(uppercaseQuery));
+                    let indexesStockTicker = filteredStockTickerList.map(str => this.initialStockList.indexOf(str));
+
+                    let lowercaseQuery = newQuery.toLowerCase();
+                    let excludeTerms = ["corporation", "pte", "ltd", "inc", "inc."];
+                    let filteredStockNameList = this.stockCompanyName.filter(item => 
+                        item.split(" ").some(word => word.toLowerCase().startsWith(lowercaseQuery) &&
+                        !excludeTerms.includes(word.toLowerCase()))
+                    );
+                    // let filteredStockNameList = this.stockCompanyName.filter(item => item.toLowerCase().includes(lowercaseQuery));
+                    let indexesStockName = filteredStockNameList.map(str => this.stockCompanyName.indexOf(str));
+
+                    // Concatenate the two index lists
+                    let combinedIndexList = indexesStockTicker.concat(indexesStockName);
+
+                    // Use Set to remove duplicates and convert it to get the uniquecombinedIndexList
+                    let uniquecombinedIndexList = Array.from(new Set(combinedIndexList));
+                    uniquecombinedIndexList.sort((a, b) => a - b);
+
+                    const filteredList = uniquecombinedIndexList.map(index => this.initialStockList[index]);
+
                     this.stockList = filteredList;
                 } else {
                     this.stockList = this.initialStockList;
@@ -168,6 +205,22 @@ export default {
         }      
     },
     async mounted() {
+        // Constant userID of 177889. To update 
+        const userId = "177889";
+        var db = getFirestore(app);
+        const docRef = doc(db, "users", userId);
+        const data = await getDoc(docRef);
+
+        // console.log(data.data().stocks);
+
+        this.initialStockList = data.data().stocks.map((stock, index) => (
+            stock.tickerName
+        ));
+
+        this.stockCompanyName = data.data().stocks.map((stock, index) => (
+            stock.stockName
+        ));
+
         this.stockList = this.initialStockList;
         const filingsPromises =  this.stockList.map(stock => this.stockFillingsToCardList(stock, "10-Q"));
         const filingsResults = await Promise.all(filingsPromises);
@@ -208,9 +261,10 @@ export default {
         // Select the top three latest dates
         const topThree = sortedByDate.slice(0, 3);
 
-        console.log(topThree);
+        // console.log(topThree);
 
         this.$emit('notification-output', topThree);
+        this.$emit('noSavedStocks', this.initialStockList.length == 0);
 
     }
 }

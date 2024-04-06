@@ -105,7 +105,56 @@ h1 {
 
 .assets {
   width: 85%;
-  height: 60px;
+  height: fit-content;
+  margin-bottom: 20px;
+  background-color: white;
+  display: flex;
+  padding-left: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: rgb(31, 43, 109);
+  justify-content: left; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  box-shadow: var(--box-shadow);
+  border-radius: 5px;
+}
+
+.investmentContainer, .headerContainer {
+  width: 95%;
+  display: flex;
+  margin-top: 15px;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.headerContainer span, .investmentContainer span {
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+}
+
+.headerContainer span:last-child, .investmentContainer span:last-child {
+  margin-right: 0;
+}
+
+.headerContainer {
+  background-color: #164F92;
+  padding: 7px;
+  color: white;
+}
+
+.investmentContainer:hover {
+  background-color: #e0e0e0; 
+}
+
+
+.points {
+  width: 65%;
+  height: 150px;
   margin-bottom: 20px;
   background-color: white;
   display: flex;
@@ -114,11 +163,10 @@ h1 {
   justify-content: left; /* Center content horizontally */
   align-items: center; /* Center content vertically */
   box-shadow: var(--box-shadow);
-  border-radius: 5px;
 }
+
 .assets:hover {
-  width: 86%;
-  height: 65px;
+  height: fit-content;
   background-color: rgb(179, 209, 228);
 }
 
@@ -129,7 +177,7 @@ h1 {
 
 /* card for the Stock Respository page */
 .card {
-  width: 85%;
+  width: 95%;
   height: 60px;
   background-color: white;
   display: flex;
@@ -146,8 +194,8 @@ h1 {
 }
 
 .cardExpand {
-  width: 85%;
-  background-color: rgb(216, 215, 215);
+  width: 95%;
+  background-color: rgb(221, 238, 251);
   display: grid;
   padding-left: 20px;
   padding-bottom: 10px;
@@ -169,7 +217,19 @@ h1 {
 .stock-repository-table-head-cell,
 .stock-repository-table-body-row,
 .stock-repository-table-body-cell {
-  border: 2px solid black;
+  border-bottom: 1px solid black;
+}
+
+.stock-repository-table-head-row {
+  background-color:#164F92;
+  color:white;
+  letter-spacing: 1px;
+}
+
+.stock-repository-table-head-cell,
+.stock-repository-table-body-row,
+.stock-repository-table-body-cell {
+  padding: 8px;
 }
 
 /* .cardExpand p:first-child {
@@ -294,6 +354,7 @@ h1 {
   border: 1px none #000;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow for better visibility */
   z-index: 1000; /* Ensure it sits above other content */
+  border-radius: 10px;
 }
 
 .modal-investment {
@@ -328,13 +389,26 @@ h1 {
   display: block; /* Show the overlay when active */
 }
 
-.modal-content h1 {
-  color: darkblue;
+.modal-content {
+  overflow-x: hidden; 
+  overflow-y: auto;
+  max-height: 250px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background-color: #888; /* Darker grey handle */
+  border-radius: 10px; /* Rounded corners for the handle */
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 8px; /* Make the scrollbar thinner */
 }
 
 .close {
   float: right;
+  transform: scale(1.5);
 }
+
 .welcome-div {
   display: flex;
   flex-direction: row;
