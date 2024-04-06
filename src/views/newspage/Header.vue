@@ -2,7 +2,7 @@
 
     <div id = "header-bar">
         <img id = "header-img" src="https://mergersandinquisitions.com/wp-content/uploads/2019/06/cat-investment-banking-banner.jpg" alt="Duck UI">
-        <input id = "header-input" type="text" placeholder = "Search Keyword..." @change="emitInputValue">
+        <input id = "header-input" type="text" placeholder = "Search Keywords" @change="emitInputValue">
 
     </div>
     

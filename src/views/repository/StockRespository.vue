@@ -68,7 +68,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 .latest-release {
     position: relative; /* Needed to position the pseudo-element */
     /* background-image: url('https://mergersandinquisitions.com/wp-content/uploads/2019/06/cat-investment-banking-banner.jpg'); */
