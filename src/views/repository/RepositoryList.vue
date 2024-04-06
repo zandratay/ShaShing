@@ -9,7 +9,7 @@
         </div>
 
         <div class="cardExpand" v-show="isStockCardExpanded(c)">
-            <p v-if="getDataForStock(c).length == 0"> oops, the stock ticker is not found! Please check if your stock ticker name is valid </p>
+            <p v-if="getDataForStock(c).length == 0"> Oops, the stock ticker is not found! Please check if your stock ticker name is valid! </p>
             <div v-else> 
                 <table class = "stock-repository-table" >
                     <thead>
