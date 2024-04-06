@@ -41,7 +41,8 @@
 <script>
 import firebaseApp from "@/firebase.js";
 import { getFirestore, doc, onSnapshot } from "firebase/firestore";
-
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 export default {
   name: "OverviewCharts",
   data() {
@@ -53,8 +54,26 @@ export default {
       assets: [],
       simulatedTime: null, // Store the simulated time globally
       simulatedAmount: null, // Store the simulated amount globally
+      user: null, 
     };
   },
+
+  created() {
+    onAuthStateChanged(auth, (user) => {
+    if (user) {
+      this.user = user;
+      // Now that we have a user, let's fetch the data.
+      this.fetchData(); // Call fetchData here when the user is defined.
+    } else {
+      // User is not logged in.
+      this.user = null;
+      // Optional: Handle the case when there is no user logged in.
+    }
+  });
+  },
+
+
+
   computed: {
     totalNetWorth() {
       // Ensure 'this.assets' is structured correctly to sum up the amounts
@@ -115,25 +134,29 @@ export default {
   methods: {
     fetchData() {
       const db = getFirestore(firebaseApp);
-      const userDocRef = doc(db, "users", "177889");
-
-      onSnapshot(
-        userDocRef,
-        (doc) => {
-          if (doc.exists()) {
-            this.assets = doc.data();
-            // Recalculate the view based on the latest data
-            this[this.activeView + "view"]();
-          } else {
-            // Document does not exist
-            console.log("Document not found");
+      console.log("hello")
+      if (this.user) {
+        const userId = this.user.uid
+        console.log(this.user.uid)
+        const userDocRef = doc(db, "users", userId);
+        onSnapshot(
+          userDocRef,
+          (doc) => {
+            if (doc.exists()) {
+              this.assets = doc.data();
+              // Recalculate the view based on the latest data
+              this[this.activeView + "view"]();
+            } else {
+              // Document does not exist
+              console.log("Document not found");
+            }
+          },
+          (error) => {
+            // Error fetching document
+            console.error("Error fetching document: ", error);
           }
-        },
-        (error) => {
-          // Error fetching document
-          console.error("Error fetching document: ", error);
-        }
-      );
+        );
+      }
     },
     calculateHistoricalCumulativeSum(assetsObject, daysBeforeNow) {
       const now = new Date();
@@ -218,8 +241,6 @@ export default {
     },
   },
 
-  mounted() {
-    this.fetchData();
-  },
+  
 };
 </script>
