@@ -30,11 +30,11 @@
             placeholder="Enter stocker name"
             class="selectInputs"
           />
-          <label class="inputDiv">Current Price</label>
+          <label class="inputDiv">Total holdings</label>
           <input
             v-model="purchasePrice"
             type="number"
-            placeholder="Enter current price"
+            placeholder="Enter total holdings"
             class="selectInputs"
           />
           <label class="inputDiv">Country name</label>
