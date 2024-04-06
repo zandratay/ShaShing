@@ -63,6 +63,8 @@
   import CPFModal from "./CPFModal.vue";
   import { getFirestore, getDoc, doc } from "firebase/firestore";
   import app from "../../firebase";
+  import { getAuth, onAuthStateChanged } from "firebase/auth";
+  const auth = getAuth();
   
   export default {
     components: {
@@ -93,6 +95,7 @@
         stocks: [],
         bonds: [],
         cpf: [],
+        user: null,
       };
     },
   
@@ -125,6 +128,23 @@
         }
       },
     },
+  
+    created() {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.user = user;
+          // Now that we have a user, fetch their data
+          this.fetchCash();
+          this.fetchStock();
+          this.fetchBonds();
+          this.fetchCPF();
+        } else {
+          // Handle user not logged in
+          this.user = null;
+        }
+      });
+    },
+  
     mounted() {
       this.fetchCash();
       this.fetchStock();
@@ -152,45 +172,52 @@
       },
   
       async fetchCash() {
-        const userId = "177889";
-        var db = getFirestore(app);
-        const docRef = doc(db, "users", userId);
-        const data = await getDoc(docRef);
-        if (data.exists()) {
-          this.cashes = data.data().cash;
+        if (this.user) {
+          const userId = this.user.uid;
+          var db = getFirestore(app);
+          const docRef = doc(db, "users", userId);
+          const data = await getDoc(docRef);
+          if (data.exists()) {
+            this.cashes = data.data().cash;
+          }
         }
       },
   
       async fetchStock() {
-        const userId = "177889";
-        var db = getFirestore(app);
-        const docRef = doc(db, "users", userId);
-        const data = await getDoc(docRef);
-        if (data.exists()) {
-          this.stocks = data.data().stocks;
+        if (this.user) {
+          const userId = this.user.uid;
+          var db = getFirestore(app);
+          const docRef = doc(db, "users", userId);
+          const data = await getDoc(docRef);
+          if (data.exists()) {
+            this.stocks = data.data().stocks;
+          }
         }
       },
   
       async fetchBonds() {
-        const userId = "177889";
-        var db = getFirestore(app);
-        const docRef = doc(db, "users", userId);
-        const data = await getDoc(docRef);
-        if (data.exists()) {
-          this.bonds = data.data().bonds;
+        if (this.user) {
+          const userId = this.user.uid;
+          var db = getFirestore(app);
+          const docRef = doc(db, "users", userId);
+          const data = await getDoc(docRef);
+          if (data.exists()) {
+            this.bonds = data.data().bonds;
+          }
         }
       },
   
       async fetchCPF() {
-        const userId = "177889";
-        var db = getFirestore(app);
-        const docRef = doc(db, "users", userId);
-        const data = await getDoc(docRef);
-        if (data.exists()) {
-          this.cpf = data.data().cpf;
+        if (this.user) {
+          const userId = this.user.uid;
+          var db = getFirestore(app);
+          const docRef = doc(db, "users", userId);
+          const data = await getDoc(docRef);
+          if (data.exists()) {
+            this.cpf = data.data().cpf;
+          }
         }
       },
     },
   };
   </script>
-  
