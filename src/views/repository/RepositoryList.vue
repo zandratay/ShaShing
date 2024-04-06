@@ -260,22 +260,12 @@ export default {
                 if (data.exists()) {
                     // this.stocks = data.data().stocks;
                     // console.log(data.data().stocks)
-                    let stocksData = data.data().stocks;
 
-                    // Deduplicate based on 'stock'
-                    let uniqueStocks = {};
-                    stocksData.forEach(stock => {
-                        if (!uniqueStocks[stock.tickerName]) {
-                            uniqueStocks[stock.tickerName] = stock; // Assumes stock contains both 'tickerName' and 'stockName'
-                        }
-                    });
-
-
-                    this.initialStockList = Object.values(uniqueStocks).map((stock, index) => (
+                    this.initialStockList = data.data().stocks.map((stock, index) => (
                         stock.tickerName
                     ));
 
-                    this.stockCompanyName = Object.values(uniqueStocks).map((stock, index) => (
+                    this.stockCompanyName = data.data().stocks.map((stock, index) => (
                         stock.stockName
                     ));
 
@@ -329,6 +319,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-</style>

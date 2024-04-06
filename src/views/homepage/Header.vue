@@ -2,7 +2,7 @@
   <div v-if="user">
     <img id="header-img"
       src="https://mergersandinquisitions.com/wp-content/uploads/2019/06/cat-investment-banking-banner.jpg"
-      alt="ShaShing" />
+      alt="Duck UI" />
 
     <div class="welcome-info">
       <div class="welcome-div">
