@@ -4,8 +4,8 @@
     </div>
   
     <div class="content">
-      <StockRespository @input-change="handleInputChange" :notificationData="notificationData" :noSavedStocks="noSavedStocks"/>
-      <RespositoryList @notification-output="notifcationToDisplay" @noSavedStocks="noSavedStocksChange" :searchQuery="searchQuery"/>
+      <StockRepository @input-change="handleInputChange" :notificationData="notificationData" :noSavedStocks="noSavedStocks"/>
+      <RepositoryList @notification-output="notifcationToDisplay" @noSavedStocks="noSavedStocksChange" :searchQuery="searchQuery"/>
     </div>
   
   </template>
@@ -13,15 +13,15 @@
   <script>
     import Header from  '../homepage/Header.vue';
     import NavBar from  '../homepage/NavBar.vue';
-    import RespositoryList from './RespositoryList.vue'
-    import StockRespository from './StockRespository.vue'
+    import RepositoryList from './RepositoryList.vue'
+    import StockRepository from './StockRepository.vue'
   
     export default {
       components: {
         Header, 
         NavBar,
-        RespositoryList,
-        StockRespository,
+        RepositoryList,
+        StockRepository,
       },
   
       data() {

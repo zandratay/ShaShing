@@ -47,9 +47,8 @@
     },
 
     watch: {
-      isUpdateBonds(newVal, oldVal) {
-        console.log(this.isUpdateCash);
-        if (newVal == true) {
+      isVisible(newVal, oldVal) {
+        if (newVal === true) {
           this.fetchBonds();
         }
       }
