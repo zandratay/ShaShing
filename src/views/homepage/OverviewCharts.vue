@@ -10,8 +10,10 @@
 
       <div class="pie-chart">
         <h1 class="heading">Your Asset Composition</h1>
-        <pie-chart style="margin-left: 5px; position: relative; height: 80%; width: 100%"
-          :data="chartDataForPie"></pie-chart>
+        <pie-chart
+          style="margin-left: 5px; position: relative; height: 80%; width: 100%"
+          :data="chartDataForPie"
+        ></pie-chart>
       </div>
     </div>
 
@@ -20,29 +22,46 @@
         <h3 class="heading" style="margin-top: 2px">Your Portfolio</h3>
 
         <div class="buttons-container">
-          <button :class="{ active: activeView === 'week' }" class="view-button" @click="weekview()">
+          <button
+            :class="{ active: activeView === 'week' }"
+            class="view-button"
+            @click="weekview()"
+          >
             1W
           </button>
-          <button :class="{ active: activeView === 'month' }" class="view-button" @click="monthview()">
+          <button
+            :class="{ active: activeView === 'month' }"
+            class="view-button"
+            @click="monthview()"
+          >
             1M
           </button>
-          <button :class="{ active: activeView === 'year' }" class="view-button" @click="yearview()">
+          <button
+            :class="{ active: activeView === 'year' }"
+            class="view-button"
+            @click="yearview()"
+          >
             1Y
           </button>
         </div>
-        <line-chart :data="chartdata" :library="{
+        <line-chart
+          :data="chartdata"
+          :library="{
             elements: { line: { tension: 0 }, point: { radius: 0 } },
-          }" style="padding-left: 10px; position: relative"></line-chart>
+          }"
+          style="padding-left: 10px; position: relative"
+        ></line-chart>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import firebaseApp from "@/firebase.js";
+import firebaseApp from "@/firebase";
 import { getFirestore, doc, onSnapshot } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 const auth = getAuth();
+
 export default {
   name: "OverviewCharts",
   data() {
@@ -54,26 +73,17 @@ export default {
       assets: [],
       simulatedTime: null, // Store the simulated time globally
       simulatedAmount: null, // Store the simulated amount globally
-      user: null, 
+      user: null,
     };
   },
-
   created() {
     onAuthStateChanged(auth, (user) => {
-    if (user) {
       this.user = user;
-      // Now that we have a user, let's fetch the data.
-      this.fetchData(); // Call fetchData here when the user is defined.
-    } else {
-      // User is not logged in.
-      this.user = null;
-      // Optional: Handle the case when there is no user logged in.
-    }
-  });
+      if (user) {
+        this.fetchData();
+      }
+    });
   },
-
-
-
   computed: {
     totalNetWorth() {
       // Ensure 'this.assets' is structured correctly to sum up the amounts
@@ -134,10 +144,10 @@ export default {
   methods: {
     fetchData() {
       const db = getFirestore(firebaseApp);
-      console.log("hello")
+      console.log("hello");
       if (this.user) {
-        const userId = this.user.uid
-        console.log(this.user.uid)
+        const userId = this.user.uid;
+        console.log(this.user.uid);
         const userDocRef = doc(db, "users", userId);
         onSnapshot(
           userDocRef,
@@ -184,10 +194,15 @@ export default {
 
       // Initialize the sums with the historical cumulative sum for each day up to 'now'
       for (let i = daysBeforeNow; i >= 0; i--) {
-        const date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
-        const label = daysBeforeNow === 364 ?
-          `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` :
-          `${date.getDate()}/${date.getMonth() + 1}`;
+        const date = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() - i
+        );
+        const label =
+          daysBeforeNow === 364
+            ? `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+            : `${date.getDate()}/${date.getMonth() + 1}`;
         sums[label] = historicalCumulativeSum;
       }
 
@@ -200,17 +215,32 @@ export default {
               const purchaseDate = new Date(year, month - 1, day); // Adjust for zero-based month index
 
               if (purchaseDate >= startOfTimeframe && purchaseDate <= now) {
-                const label = daysBeforeNow === 364 ?
-                  `${purchaseDate.getDate()}/${purchaseDate.getMonth() + 1}/${purchaseDate.getFullYear()}` :
-                  `${purchaseDate.getDate()}/${purchaseDate.getMonth() + 1}`;
+                const label =
+                  daysBeforeNow === 364
+                    ? `${purchaseDate.getDate()}/${
+                        purchaseDate.getMonth() + 1
+                      }/${purchaseDate.getFullYear()}`
+                    : `${purchaseDate.getDate()}/${
+                        purchaseDate.getMonth() + 1
+                      }`;
                 const amount = parseFloat(asset.amount);
 
                 // Add amount to the historical sum from this date onwards
-                for (let j = (purchaseDate - startOfTimeframe) / (1000 * 60 * 60 * 24); j <= daysBeforeNow; j++) {
-                  const futureDate = new Date(startOfTimeframe.getTime() + j * (1000 * 60 * 60 * 24));
-                  const futureLabel = daysBeforeNow === 364 ?
-                    `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}` :
-                    `${futureDate.getDate()}/${futureDate.getMonth() + 1}`;
+                for (
+                  let j =
+                    (purchaseDate - startOfTimeframe) / (1000 * 60 * 60 * 24);
+                  j <= daysBeforeNow;
+                  j++
+                ) {
+                  const futureDate = new Date(
+                    startOfTimeframe.getTime() + j * (1000 * 60 * 60 * 24)
+                  );
+                  const futureLabel =
+                    daysBeforeNow === 364
+                      ? `${futureDate.getDate()}/${
+                          futureDate.getMonth() + 1
+                        }/${futureDate.getFullYear()}`
+                      : `${futureDate.getDate()}/${futureDate.getMonth() + 1}`;
 
                   if (sums[futureLabel] !== undefined) {
                     sums[futureLabel] += amount;
@@ -222,8 +252,7 @@ export default {
         }
       });
       return sums;
-    }
-    ,
+    },
     weekview() {
       this.activeView = "week";
       // Adjust the days parameter as needed for accurate timeframe calculation
@@ -236,11 +265,23 @@ export default {
     },
     yearview() {
       this.activeView = "year";
-      // Adjust the days parameter as needed for accurate timeframe calculation
       this.chartdata = this.calculateHistoricalCumulativeSum(this.assets, 364);
+
+      // Generate monthly labels
+      let monthlyData = {};
+      Object.keys(this.chartdata).forEach((label) => {
+        const [day, month, year] = label.split("/");
+        const monthYear = `${month}/${year}`;
+
+        if (!monthlyData[monthYear]) {
+          monthlyData[monthYear] = this.chartdata[label];
+        } else {
+          monthlyData[monthYear] += this.chartdata[label];
+        }
+      });
+
+      this.chartdata = monthlyData;
     },
   },
-
-  
 };
 </script>
