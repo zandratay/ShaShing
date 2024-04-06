@@ -29,7 +29,6 @@
 import firebaseApp from "@/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 const auth = getAuth();
-
 export default {
   data() {
     return {
@@ -42,6 +41,7 @@ export default {
       this.user = user;
     });
   },
+
   methods: {
     activateInvestment() {
       this.$emit("addInvestment", true);

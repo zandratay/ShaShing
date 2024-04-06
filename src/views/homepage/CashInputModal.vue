@@ -1,5 +1,9 @@
 <template>
-  <div class="modal-overlay" :class="{ 'active': isOpened }" @click="closeModal"></div>
+  <div
+    class="modal-overlay"
+    :class="{ active: isOpened }"
+    @click="closeModal"
+  ></div>
   <div class="modal" v-if="isOpened">
     <div class="investment">
       <text class="addInvestment">Cash</text>
@@ -56,7 +60,9 @@
               type="date"
               placeholder="Enter purchase date"
               class="selectInputs"
+              @input="validateDate(purchaseDate)"
             />
+            <div v-if="dateError" class="error">{{ dateError }}</div>
           </div>
         </div>
       </div>
@@ -78,6 +84,8 @@ import {
 } from "firebase/firestore";
 import app from "../../firebase";
 import { X } from "lucide-react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 export default {
   props: ["isOpened"],
 
@@ -91,7 +99,15 @@ export default {
       selectedInvestment: "",
       amount: "",
       purchaseDate: "",
+      dateError: "",
+      user: null,
     };
+  },
+
+  created() {
+    onAuthStateChanged(auth, (user) => {
+      this.user = user;
+    });
   },
 
   methods: {
@@ -112,30 +128,80 @@ export default {
       this.dropDown = false;
     },
 
-    async submit() {
-      const userId = '177889'
-      var db = getFirestore(app);
-      const docRef = doc(db, "users", userId)
-      const data = await getDoc(docRef)
+    validateDate(dateString) {
+      if (!dateString.trim()) {
+        this.dateError = "";
+        return true; // Consider empty input as valid for this specific check
+      }
+      const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+      const matches = dateString.match(regex);
+      if (matches) {
+        const day = parseInt(matches[1], 10);
+        const month = parseInt(matches[2], 10) - 1; // JavaScript months are 0-indexed
+        const year = parseInt(matches[3], 10);
+        const inputDate = new Date(year, month, day);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset today's time to ensure accurate comparison
 
-      if (!data.exists()) {
-        await setDoc(docRef, {
-          id: userId, 
-          cash: [{ selectedInvestment: this.selectedInvestment, amount: this.amount, purchaseDate: this.purchaseDate } ],
-          bonds: [],
-          cpf: [],
-          stocks: [],
-          others: []
-        })
+        if (inputDate > today) {
+          this.dateError = "Date must not be in the future.";
+          return false;
+        } else {
+          this.dateError = "";
+          return true;
+        }
       } else {
-        const existing = data.data().cash
-        await updateDoc(docRef, {
-          cash: [...existing, { selectedInvestment: this.selectedInvestment, amount: this.amount, purchaseDate: this.purchaseDate }],
-        });
+        this.dateError = "Format: DD/MM/YYYY.";
+        return false;
+      }
+    },
+
+    async submit() {
+      if (!this.validateDate(this.purchaseDate)) {
+        this.dateError = "Format: DD/MM/YYYY.";
+        return; // Exit the submit function early
       }
 
-      console.log("successful");
-    }
+      this.dateError = "";
+
+      if (this.user) {
+        const userId = this.user.uid;
+        var db = getFirestore(app);
+        const docRef = doc(db, "users", userId);
+        const data = await getDoc(docRef);
+
+        if (!data.exists()) {
+          await setDoc(docRef, {
+            id: userId,
+            cash: [
+              {
+                selectedInvestment: this.selectedInvestment,
+                amount: this.amount,
+                purchaseDate: this.purchaseDate,
+              },
+            ],
+            bonds: [],
+            cpf: [],
+            stocks: [],
+            others: [],
+          });
+        } else {
+          const existing = data.data().cash;
+          await updateDoc(docRef, {
+            cash: [
+              ...existing,
+              {
+                selectedInvestment: this.selectedInvestment,
+                amount: this.amount,
+                purchaseDate: this.purchaseDate,
+              },
+            ],
+          });
+        }
+
+        console.log("successful");
+      }
+    },
   },
 };
 </script>

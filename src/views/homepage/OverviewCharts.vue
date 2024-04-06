@@ -40,8 +40,8 @@
 
 <script>
 import firebaseApp from "@/firebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 const auth = getAuth();
 
 export default {
@@ -140,12 +140,9 @@ export default {
             // Document does not exist
             console.log("Document not found");
           }
-        },
-        (error) => {
-          // Error fetching document
-          console.error("Error fetching document: ", error);
         }
-      );
+        );
+      }
     },
     calculateHistoricalCumulativeSum(assetsObject, daysBeforeNow) {
       const now = new Date();
@@ -228,6 +225,5 @@ export default {
       // Adjust the days parameter as needed for accurate timeframe calculation
       this.chartdata = this.calculateHistoricalCumulativeSum(this.assets, 364);
     },
-  },
 };
 </script>
