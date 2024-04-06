@@ -45,12 +45,11 @@ export default {
   },
 
   watch: {
-    isUpdateStock(newVal, oldVal) {
-      console.log(this.isUpdateStock);
-      if (newVal == true) {
-        this.fetchStock();
+    isVisible(newVal, oldVal) {
+        if (newVal === true) {
+          this.fetchStock();
+        }
       }
-    }
   },
 
   created() {

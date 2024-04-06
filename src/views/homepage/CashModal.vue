@@ -47,9 +47,8 @@
     },
 
     watch: {
-      isUpdateCash(newVal, oldVal) {
-        console.log(this.isUpdateCash);
-        if (newVal == true) {
+      isVisible(newVal, oldVal) {
+        if (newVal === true) {
           this.fetchCash();
         }
       }
@@ -71,12 +70,14 @@
     mounted() {
       this.fetchCash();
     },
+
     methods: {
       close() {
         this.$emit('update:isVisible', false);
       },
       
       async fetchCash() {
+        console.log("im called")
         if (this.user) {
           const userId = this.user.uid;
           var db = getFirestore(app);

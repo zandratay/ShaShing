@@ -49,7 +49,7 @@
             </div>
           </div> -->
         </div></div>
-      <CashModal v-model:isVisible="modals.cash" />
+      <CashModal v-model:isVisible="modals.cash"/>
       <StocksModal v-model:isVisible="modals.stocks" />
       <BondsModal v-model:isVisible="modals.bonds" />
       <CPFModal v-model:isVisible="modals.cpf" />
@@ -99,58 +99,18 @@
       };
     },
   
-    watch: {
-      isUpdateCash(newVal, oldVal) {
-        console.log(this.isUpdateCash);
-        if (newVal == true) {
-          this.fetchCash();
-        }
-      },
-  
-      isUpdateStock(newVal, oldVal) {
-        console.log(this.isUpdateStock);
-        if (newVal == true) {
-          this.fetchStock();
-        }
-      },
-  
-      isUpdateBonds(newVal, oldVal) {
-        console.log(this.isUpdateCash);
-        if (newVal == true) {
-          this.fetchBonds();
-        }
-      },
-  
-      isUpdateCPF(newVal, oldVal) {
-        console.log(this.isUpdateCash);
-        if (newVal == true) {
-          this.fetchCPF();
-        }
-      },
-    },
-  
     created() {
       onAuthStateChanged(auth, (user) => {
         if (user) {
           this.user = user;
           // Now that we have a user, fetch their data
-          this.fetchCash();
-          this.fetchStock();
-          this.fetchBonds();
-          this.fetchCPF();
         } else {
           // Handle user not logged in
           this.user = null;
         }
       });
     },
-  
-    mounted() {
-      this.fetchCash();
-      this.fetchStock();
-      this.fetchBonds();
-      this.fetchCPF();
-    },
+
   
     methods: {
       openModal(asset) {
@@ -168,54 +128,6 @@
           this.modals.stocks = true;
         } else if (asset === "CPF") {
           this.modals.cpf = true;
-        }
-      },
-  
-      async fetchCash() {
-        if (this.user) {
-          const userId = this.user.uid;
-          var db = getFirestore(app);
-          const docRef = doc(db, "users", userId);
-          const data = await getDoc(docRef);
-          if (data.exists()) {
-            this.cashes = data.data().cash;
-          }
-        }
-      },
-  
-      async fetchStock() {
-        if (this.user) {
-          const userId = this.user.uid;
-          var db = getFirestore(app);
-          const docRef = doc(db, "users", userId);
-          const data = await getDoc(docRef);
-          if (data.exists()) {
-            this.stocks = data.data().stocks;
-          }
-        }
-      },
-  
-      async fetchBonds() {
-        if (this.user) {
-          const userId = this.user.uid;
-          var db = getFirestore(app);
-          const docRef = doc(db, "users", userId);
-          const data = await getDoc(docRef);
-          if (data.exists()) {
-            this.bonds = data.data().bonds;
-          }
-        }
-      },
-  
-      async fetchCPF() {
-        if (this.user) {
-          const userId = this.user.uid;
-          var db = getFirestore(app);
-          const docRef = doc(db, "users", userId);
-          const data = await getDoc(docRef);
-          if (data.exists()) {
-            this.cpf = data.data().cpf;
-          }
         }
       },
     },
