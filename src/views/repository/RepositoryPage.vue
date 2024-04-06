@@ -13,8 +13,8 @@
   <script>
     import Header from  '../homepage/Header.vue';
     import NavBar from  '../homepage/NavBar.vue';
-    import RepositoryList from './RepositoryList.vue'
-    import StockRepository from './StockRepository.vue'
+    import RepositoryList from './RespositoryList.vue'
+    import StockRepository from './StockRespository.vue'
   
     export default {
       components: {
