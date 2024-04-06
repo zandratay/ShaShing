@@ -59,6 +59,8 @@
 <script>
 import firebaseApp from "@/firebase";
 import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
 
 export default {
   name: "OverviewCharts",
@@ -272,10 +274,13 @@ export default {
         const [day, month, year] = label.split("/");
         const monthYear = `${month}/${year}`;
 
-        if (!monthlyData[monthYear]) {
+        // Only update the monthly data if it's the last day of the month or the last day we have data for
+        if (
+          !monthlyData[monthYear] ||
+          day === "31" ||
+          day === Object.keys(this.chartdata).slice(-1)[0].split("/")[0]
+        ) {
           monthlyData[monthYear] = this.chartdata[label];
-        } else {
-          monthlyData[monthYear] += this.chartdata[label];
         }
       });
 
