@@ -117,6 +117,7 @@ export default {
       this.selectedInvestment = "";
       this.amount = "";
       this.purchaseDate = "";
+      this.dateError = "";
     },
 
     openDropDown() {

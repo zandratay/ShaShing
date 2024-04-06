@@ -45,6 +45,7 @@
               v-model="purchaseDate"
               placeholder="Enter purchase date"
               class="selectInputs"
+              type="date"
               @input="validateDate(purchaseDate)"
             />
             <div v-if="dateError" class="error">{{ dateError }}</div>
@@ -107,6 +108,7 @@ export default {
       this.purchasePrice = "";
       this.purchaseDate = "";
       this.description = "";
+      this.dateError = "";
     },
 
     validateDate(dateString) {

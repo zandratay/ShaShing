@@ -130,6 +130,7 @@ export default {
       this.purchasePrice = "";
       this.purchaseDate = "";
       this.identificationNo = "";
+      this.dateError = "";
     },
 
     openDropDown() {
