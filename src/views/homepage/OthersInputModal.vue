@@ -176,6 +176,7 @@ export default {
         }
 
         console.log("successful");
+        this.close();
       }
     },
   },
