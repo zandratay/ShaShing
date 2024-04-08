@@ -31,10 +31,10 @@
             placeholder="Enter asset name"
             class="selectInputs"
           />
-          <label class="inputDiv">Current Price</label>
+          <label class="inputDiv">Total Holdings</label>
           <input
             v-model="purchasePrice"
-            placeholder="Enter current price"
+            placeholder="Enter total holdings"
             class="selectInputs"
           />
         </div>
