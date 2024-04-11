@@ -45,7 +45,7 @@
         </div>
         <div class="forms">
           <div class="forms">
-            <label>Total Holdings</label>
+            <label>Cash Holdings (S$)</label>
             <input
               v-model="amount"
               type="number"

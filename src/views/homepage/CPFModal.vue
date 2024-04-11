@@ -8,7 +8,7 @@
       <h1> CPF </h1>
       <div class="modal-content">
         <div class="headerContainer">
-          <span>Amount</span>
+          <span>Holdings (S$)</span>
           <span>Account</span>
         </div>
       <div v-for="(item, index) in cpf" :key="index" class="pointDiv">

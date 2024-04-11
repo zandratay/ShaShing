@@ -30,7 +30,7 @@
             placeholder="Enter stocker name"
             class="selectInputs"
           />
-          <label class="inputDiv">Total Holdings</label>
+          <label class="inputDiv">Stocks Holdings (S$)</label>
           <input
             v-model="purchasePrice"
             type="number"

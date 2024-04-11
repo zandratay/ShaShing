@@ -31,7 +31,7 @@
             placeholder="Enter bond name"
             class="selectInputs"
           />
-          <label class="inputDiv">Total Holdings</label>
+          <label class="inputDiv">Bonds Holdings (S$)</label>
           <input
             type="number"
             v-model="purchasePrice"

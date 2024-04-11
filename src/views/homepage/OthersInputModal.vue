@@ -31,7 +31,7 @@
             placeholder="Enter asset name"
             class="selectInputs"
           />
-          <label class="inputDiv">Total Holdings</label>
+          <label class="inputDiv">Holdings (S$)</label>
           <input
             v-model="purchasePrice"
             placeholder="Enter total holdings"

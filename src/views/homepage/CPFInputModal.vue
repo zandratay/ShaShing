@@ -69,7 +69,7 @@
           </div>
         </div>
         <div class="forms">
-          <label>Total Holdings</label>
+          <label>CPF Holdings (S$)</label>
           
               <input
               v-model="amount"

@@ -9,7 +9,7 @@
         <div class="headerContainer">
           <span>Ticker</span>
           <span>Country</span>
-          <span>Amount</span>
+          <span>Holdings (S$)</span>
         </div>
         <div v-for="(item, index) in bonds" :key="index" class="pointDiv">
             <div class="investmentContainer">
