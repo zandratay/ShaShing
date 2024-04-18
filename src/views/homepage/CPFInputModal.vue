@@ -67,19 +67,25 @@
               </button>
             </div>
           </div>
+          <label class="inputDiv">Purchase date</label>
+          <input
+            v-model="purchaseDate"
+            type="date"
+            placeholder="Enter purchase date"
+            class="selectInputs"
+            @input="validateDate(purchaseDate)"
+          />
+          <div v-if="dateError" class="error">{{ dateError }}</div>
         </div>
         <div class="forms">
           <label>CPF Holdings (S$)</label>
-          
-              <input
-              v-model="amount"
-              type="number"
-              placeholder="Enter total holdings"
-              class="selectInputs"
-            />
-          
-          
 
+          <input
+            v-model="amount"
+            type="number"
+            placeholder="Enter total holdings"
+            class="selectInputs"
+          />
         </div>
       </div>
       <div class="nextButton">
@@ -110,6 +116,8 @@ export default {
       selectAccount: "",
       amount: "",
       user: null,
+      purchaseDate: "",
+      dateError: "",
     };
   },
 
@@ -125,6 +133,8 @@ export default {
       this.$emit("cpfSubmitted", true);
       this.selectAccount = "";
       this.amount = "";
+      this.purchaseDate = "";
+      this.dateError = "";
     },
 
     openDropDown() {
@@ -136,19 +146,46 @@ export default {
       this.dropDown = false;
     },
 
+    validateDate(dateString) {
+      if (!dateString.trim()) {
+        this.dateError = "";
+        return true; // Consider empty input as valid for this specific check
+      }
+      const inputDate = new Date(dateString);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset today's time to ensure accurate comparison
+
+      if (inputDate > today) {
+        this.dateError = "Date must not be in the future.";
+        return false;
+      } else {
+        this.dateError = "";
+        return true;
+      }
+    },
+
     async submit() {
+      if (!this.validateDate(this.purchaseDate)) {
+        this.dateError = "Format: DD/MM/YYYY.";
+        return; // Exit the submit function early
+      }
+
+      this.dateError = "";
       if (this.user) {
         const userId = this.user.uid;
         var db = getFirestore(app);
         const docRef = doc(db, "users", userId);
         const data = await getDoc(docRef);
+        const realDate = this.purchaseDate.split('-')
+        const inputDate = realDate[2] + "/" + realDate[1] + "/" + realDate[0]
+        console.log(inputDate);
 
         if (!data.exists()) {
           await setDoc(docRef, {
             id: userId,
             cash: [],
             bonds: [],
-            cpf: [{ selectAccount: this.selectAccount, amount: this.amount }],
+            cpf: [{ selectAccount: this.selectAccount, amount: this.amount, purchaseDate: inputDate }],
             stocks: [],
             others: [],
           });
@@ -157,7 +194,7 @@ export default {
           await updateDoc(docRef, {
             cpf: [
               ...existing,
-              { selectAccount: this.selectAccount, amount: this.amount },
+              { selectAccount: this.selectAccount, amount: this.amount, purchaseDate: inputDate },
             ],
           });
         }

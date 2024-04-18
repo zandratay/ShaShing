@@ -66,21 +66,39 @@ export default {
         async getArticles(query) {
 
             var url = 'https://newsapi.org/v2/everything?' +
-                'q=' + query + '&' +
-                'sortBy=publishedAt&' +
-                'language=en&' +
-                'excludeDomains=yahoo.com&'+
+                  'q=' + encodeURIComponent(query) + '&' +
+                  'sortBy=publishedAt&' +
+                  'language=en&' +
+                  'excludeDomains=yahoo.com&' +
                 'apiKey=088092c2cff740e3b9dc4597a812f7d5';
+                let req = new Request(url);
 
-            var req = new Request(url);
+            try {
+                let response = await fetch(req);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                let json = await response.json();
+                console.log("hi this is Evan")
+                if (json.articles) {
+                    this.newsItems = json.articles.filter((item) => item.source.name != "[Removed]");
+                    console.log("hi this is Evan 2")
+                } else {
+                    throw new Error('No articles found');
+                }
+            } catch (error) {
+                console.error('There was a problem with fetching news articles:', error);
+            }
 
-            let allarticles = await fetch(req).then(function(response) {
-                            return response.json();
-                                }).then(function(data) {
-                                    return data.articles
-                                });
+            // var req = new Request(url);
 
-            this.newsItems = allarticles.filter((item) => item.source.name != "[Removed]");
+            // let allarticles = await fetch(req).then(function(response) {
+            //                 return response.json();
+            //                     }).then(function(data) {
+            //                         return data.articles
+            //                     });
+
+            // this.newsItems = allarticles.filter((item) => item.source.name != "[Removed]");
         },
 
         imageError(event) {
