@@ -79,7 +79,6 @@
         </div>
         <div class="forms">
           <label>CPF Holdings (S$)</label>
-
           <input
             v-model="amount"
             type="number"
