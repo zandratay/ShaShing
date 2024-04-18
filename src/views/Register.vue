@@ -1,6 +1,6 @@
 <template>
   <div class="landingPage">
-    <img src="https://www.pngmart.com/files/23/Investment-PNG-File.png" alt="Duck UI" width="150px" height="150px">
+    <img src="/logo.png" alt="Duck UI" width="150px" height="150px">
     <h1>Create an account</h1>
     <p id="existingtext">Already have an account?<button @click="existinguser" class="existingUserBtn"
         id="existing"><strong>Log In.</strong></button></p>

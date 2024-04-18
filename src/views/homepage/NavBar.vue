@@ -2,7 +2,7 @@
     <div class="nav-container">
 
         <div class="profile-information">
-            <img id="duck-ui" src="/logo.jpg" alt="Duck UI">
+            <img id="duck-ui" src="/logo.png" alt="Duck UI">
             <strong> Sha-Shing </strong>
         </div>
 
