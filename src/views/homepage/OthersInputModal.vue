@@ -36,6 +36,7 @@
             v-model="purchasePrice"
             placeholder="Enter total holdings"
             class="selectInputs"
+            type="number"
           />
         </div>
         <div class="forms">
@@ -65,6 +66,9 @@
           <button class="whiteButton" @click="submit">Submit</button>
         </div>
       </div>
+      <div v-if="generalError" class="error">
+        {{ generalError }}
+      </div>
     </div>
   </div>
 </template>
@@ -92,6 +96,7 @@ export default {
       description: "",
       user: null,
       dateError: "",
+      generalError: "",
     };
   },
 
@@ -109,6 +114,7 @@ export default {
       this.purchaseDate = "";
       this.description = "";
       this.dateError = "";
+      this.generalError = "";
     },
 
     validateDate(dateString) {
@@ -133,6 +139,11 @@ export default {
       if (!this.validateDate(this.purchaseDate)) {
         this.dateError = "Format: DD/MM/YYYY.";
         return; // Exit the submit function early
+      }
+
+      if (this.assetName === "" || this.purchasePrice === "" || this.purchaseDate === "" || this.description === "") {
+        this.generalError = "All fields are required"
+        return;
       }
 
       this.dateError = "";

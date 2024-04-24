@@ -69,6 +69,9 @@
       <div class="nextButton">
         <button class="whiteButton" @click="submit">Submit</button>
       </div>
+      <div v-if="generalError" class="error">
+        {{ generalError }}
+      </div>
     </div>
   </div>
 </template>
@@ -101,6 +104,7 @@ export default {
       purchaseDate: "",
       dateError: "",
       user: null,
+      generalError: "",
     };
   },
 
@@ -118,6 +122,8 @@ export default {
       this.amount = "";
       this.purchaseDate = "";
       this.dateError = "";
+      this.generalError = "";
+      this.dropDown = false;
     },
 
     openDropDown() {
@@ -153,6 +159,11 @@ export default {
       if (!this.validateDate(this.purchaseDate)) {
         this.dateError = "Format: DD/MM/YYYY.";
         return; // Exit the submit function early
+      }
+
+      if (this.amount === "" || this.purchaseDate === "" || this.selectedInvestment == "") {
+        this.generalError = "All fields are required"
+        return;
       }
 
       this.dateError = "";

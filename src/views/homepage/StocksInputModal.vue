@@ -83,7 +83,11 @@
     <div class="nextButton">
       <button class="whiteButton" @click="submit">Submit</button>
     </div>
+    <div v-if="generalError" class="error">
+    {{ generalError }}
   </div>
+  </div>
+  
 </template>
 <script>
 import {
@@ -112,6 +116,7 @@ export default {
       tickerName: "",
       purchaseDate: "",
       dateError: "",
+      generalError: "",
     };
   },
 
@@ -128,9 +133,10 @@ export default {
       this.selectedCountry = "";
       this.stockName = "";
       this.purchasePrice = "";
-      this.purchasePrice = "";
       this.tickerName = "";
       this.purchaseDate = "";
+      this.generalError = "";
+      this.dropDown = false;
     },
 
     openDropDown() {
@@ -166,15 +172,20 @@ export default {
         return; // Exit the submit function early
       }
 
+      if (this.purchasePrice === "" || this.purchaseDate === "" || this.selectedCountry === "" || this.tickerName === "" || this.stockName === "") {
+        this.generalError = "All fields are required"
+        return;
+      }
+
       this.dateError = "";
       if (this.user) {
         const userId = this.user.uid;
         var db = getFirestore(app);
         const docRef = doc(db, "users", userId);
         const data = await getDoc(docRef);
-        const realDate = this.purchaseDate.split('-')
+        const realDate = this.purchaseDate.split("-");
 
-        const inputDate = realDate[2] + "/" + realDate[1] + "/" + realDate[0]
+        const inputDate = realDate[2] + "/" + realDate[1] + "/" + realDate[0];
 
         if (!data.exists()) {
           await setDoc(docRef, {

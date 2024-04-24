@@ -75,6 +75,7 @@
               class="selectInputs"
               type="date"
               @input="validateDate(purchaseDate)"
+              
             />
             <div v-if="dateError" class="error">{{ dateError }}</div>
           </div>
@@ -82,6 +83,9 @@
       </div>
       <div class="nextButton">
         <button class="whiteButton" @click="submit">Submit</button>
+      </div>
+      <div v-if="generalError" class="error">
+        {{ generalError }}
       </div>
     </div>
   </div>
@@ -112,6 +116,7 @@ export default {
       purchaseDate: "",
       user: null,
       dateError: "",
+      generalError: "",
     };
   },
 
@@ -131,6 +136,8 @@ export default {
       this.purchaseDate = "";
       this.identificationNo = "";
       this.dateError = "";
+      this.generalError = "";
+      this.dropDown = false;
     },
 
     openDropDown() {
@@ -164,6 +171,11 @@ export default {
       if (!this.validateDate(this.purchaseDate)) {
         this.dateError = "Format: DD/MM/YYYY.";
         return; // Exit the submit function early
+      }
+
+      if (this.bondName === "" || this.selectedCountry === "" || this.purchasePrice === "" || this.purchaseDate === "" || this.identificationNo === "") {
+        this.generalError = "All fields are required"
+        return;
       }
 
       this.dateError = "";
